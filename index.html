@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>WAKE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #060606;
+      --surface: #101012;
+      --surface-2: #16161a;
+      --fg: #f2f2f4;
+      --muted: #8a8a92;
+      --line: #242429;
+      --chrome-1: #ffffff;
+      --chrome-2: #b8b8c0;
+      --chrome-3: #6e6e78;
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #000;
+      color: var(--fg);
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== PHONE FRAME ===== */
+    .phone {
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 860px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      border: 1px solid #1c1c20;
+      border-radius: 0;
+    }
+    @media (min-width: 430px) {
+      .phone { border-radius: 32px; height: 844px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.8); }
+    }
+
+    /* ===== CHROME LOGO ===== */
+    .wake-logo {
+      font-family: 'Metal Mania', cursive;
+      background: linear-gradient(180deg, #ffffff 0%, #d0d0d6 38%, #7a7a82 52%, #c6c6cc 66%, #ffffff 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      letter-spacing: .04em;
+      text-shadow: 0 1px 0 rgba(255,255,255,.15);
+      filter: drop-shadow(0 2px 6px rgba(255,255,255,.12));
+    }
+
+    /* ===== HEADER ===== */
+    .topbar {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(6,6,6,.9); backdrop-filter: blur(10px);
+    }
+    .topbar .wake-logo { font-size: 1.7rem; line-height: 1; }
+    .top-actions { display: flex; gap: 8px; align-items: center; }
+    .chip {
+      height: 34px; min-width: 34px; padding: 0 10px; border-radius: 11px;
+      background: var(--surface-2); border: 1px solid var(--line); color: var(--fg);
+      font-size: .78rem; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      transition: border-color .2s, background .2s;
+    }
+    .chip:active { background: #1d1d22; }
+    .chip .badge {
+      position: absolute; top: -5px; right: -5px;
+      background: #fff; color: #000; font-size: .6rem; font-weight: 800;
+      border-radius: 999px; min-width: 16px; height: 16px; display: grid; place-items: center; padding: 0 4px;
+    }
+    .chip-cart { position: relative; }
+
+    /* ===== SCROLL AREA ===== */
+    .screen {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: 18px 18px 24px;
+      text-align: center;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .view { display: none; animation: fade .3s ease; }
+    .view.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ===== HERO ===== */
+    .hero {
+      border-radius: var(--radius);
+      padding: 30px 18px;
+      background:
+        radial-gradient(220px 140px at 50% 0%, rgba(255,255,255,.10), transparent 70%),
+        linear-gradient(180deg, #131316, #0a0a0c);
+      border: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .hero .wake-logo { font-size: 3.4rem; line-height: 1; display: block; margin-bottom: 6px; }
+    .hero .eyebrow {
+      display: inline-block; font-size: .64rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; margin-bottom: 16px;
+    }
+    .hero p { color: var(--muted); font-size: .85rem; max-width: 26ch; margin: 0 auto 18px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px 18px; border-radius: var(--radius-sm);
+      font-weight: 600; font-size: .9rem; cursor: pointer; border: 1px solid transparent;
+      transition: transform .15s, background .2s;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { background: linear-gradient(180deg, #fff, #d4d4da); color: #000; }
+    .btn-ghost { background: var(--surface-2); color: var(--fg); border-color: var(--line); margin-top: 9px; }
+    .btn-google { background: #fff; color: #1f1f1f; margin-top: 9px; }
+    .g-logo { width: 16px; height: 16px; }
+
+    /* ===== SECTION TITLE ===== */
+    .sec-title {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 22px 2px 12px; text-align: left;
+    }
+    .sec-title h2 { font-size: 1.05rem; font-weight: 700; }
+    .sec-title a { color: var(--muted); font-size: .76rem; cursor: pointer; }
+
+    /* ===== CHIP ROW (categories) ===== */
+    .chips-row { display: flex; gap: 8px; overflow-x: auto; padding: 2px; margin-bottom: 6px; scrollbar-width: none; }
+    .chips-row::-webkit-scrollbar { display: none; }
+    .cat-chip {
+      flex-shrink: 0; padding: 8px 15px; border-radius: 999px; font-size: .78rem; font-weight: 500;
+      background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); cursor: pointer; transition: all .2s;
+    }
+    .cat-chip.active { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
+
+    /* ===== PRODUCTS GRID ===== */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      overflow: hidden; text-align: left; transition: transform .15s, border-color .2s;
+    }
+    .card:active { transform: scale(.98); }
+    .card-img {
+      aspect-ratio: 1/1.15; position: relative; display: grid; place-items: center;
+      background: radial-gradient(120px 90px at 50% 25%, rgba(255,255,255,.08), transparent), linear-gradient(135deg, #18181c, #0d0d10);
+    }
+    .card-img .wake-logo { font-size: 1.6rem; opacity: .5; }
+    .tag {
+      position: absolute; top: 9px; left: 9px; background: #fff; color: #000;
+      font-size: .58rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
+    }
+    .card-body { padding: 11px 12px 13px; }
+    .card-body .cat { color: var(--muted); font-size: .68rem; letter-spacing: .03em; }
+    .card-body h3 { font-size: .82rem; font-weight: 600; margin: 3px 0 0; line-height: 1.25; }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; }
+    .price { font-weight: 800; font-size: .92rem; }
+    .add {
+      background: var(--surface-2); border: 1px solid var(--line); color: var(--fg);
+      border-radius: 9px; width: 30px; height: 30px; cursor: pointer; font-size: 1.05rem; transition: all .15s;
+    }
+    .add:active { background: #fff; color: #000; }
+
+    /* ===== ACCOUNT / AUTH ===== */
+    .auth-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 22px 18px; margin-bottom: 14px;
+    }
+    .auth-card h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+    .auth-card p.sub { color: var(--muted); font-size: .82rem; margin-bottom: 18px; }
+    .field { text-align: left; margin-bottom: 12px; }
+    .field label { display: block; font-size: .72rem; color: var(--muted); margin-bottom: 5px; padding-left: 4px; }
+    .field input {
+      width: 100%; padding: 12px 14px; border-radius: var(--radius-sm);
+      background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); font-size: .9rem; outline: none;
+    }
+    .field input:focus { border-color: #5a5a64; }
+    .divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .72rem; margin: 16px 0; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .switch-line { font-size: .8rem; color: var(--muted); margin-top: 16px; }
+    .switch-line b { color: var(--fg); cursor: pointer; }
+
+    /* ===== OTP (code 6 chiffres) ===== */
+    .otp-row { display: flex; gap: 8px; justify-content: center; margin: 8px 0 4px; }
+    .otp-row input {
+      width: 44px; height: 52px; text-align: center; font-size: 1.3rem; font-weight: 700;
+      border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); outline: none;
+    }
+    .otp-row input:focus { border-color: #fff; }
+    .resend { color: var(--muted); font-size: .76rem; margin-top: 14px; }
+    .resend b { color: var(--fg); cursor: pointer; }
+
+    /* ===== CART ===== */
+    .cart-item {
+      display: flex; gap: 12px; align-items: center; text-align: left;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+      padding: 10px; margin-bottom: 10px;
+    }
+    .cart-item .thumb {
+      width: 54px; height: 60px; border-radius: 9px; flex-shrink: 0;
+      background: linear-gradient(135deg, #18181c, #0d0d10); display: grid; place-items: center;
+    }
+    .cart-item .thumb .wake-logo { font-size: .8rem; opacity: .5; }
+    .cart-item .info { flex: 1; }
+    .cart-item .info h4 { font-size: .82rem; font-weight: 600; }
+    .cart-item .info span { font-size: .72rem; color: var(--muted); }
+    .cart-item .price { font-size: .85rem; }
+    .qty { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .qty button { width: 22px; height: 22px; border-radius: 7px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); cursor: pointer; font-size: .9rem; }
+    .qty span { font-size: .8rem; min-width: 16px; text-align: center; }
+    .cart-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 4px; font-weight: 700; font-size: 1rem; border-top: 1px solid var(--line); margin-top: 6px;
+    }
+    .empty { color: var(--muted); padding: 50px 20px; font-size: .9rem; }
+    .empty .wake-logo { font-size: 2.4rem; display: block; margin-bottom: 12px; opacity: .4; }
+
+    /* ===== BOTTOM NAV ===== */
+    .tabbar {
+      flex-shrink: 0; display: flex; justify-content: space-around; align-items: center;
+      padding: 9px 6px calc(9px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line); background: rgba(8,8,9,.95); backdrop-filter: blur(12px);
+    }
+    .tab {
+      background: none; border: none; cursor: pointer; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      font-size: .62rem; font-weight: 500; padding: 5px 12px; border-radius: 12px; transition: color .2s;
+    }
+    .tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+    .tab.active { color: var(--fg); }
+    .tab .dot-ind { width: 4px; height: 4px; border-radius: 999px; background: #fff; opacity: 0; transition: opacity .2s; }
+    .tab.active .dot-ind { opacity: 1; }
+
+    /* toast */
+    .toast {
+      position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #fff; color: #000; font-size: .8rem; font-weight: 600; padding: 10px 18px;
+      border-radius: 999px; opacity: 0; pointer-events: none; transition: all .3s; z-index: 30; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <span class="wake-logo">WAKE</span>
+      <div class="top-actions">
+        <button class="chip" id="langToggle">🌐<span id="langLabel">FR</span></button>
+        <button class="chip chip-cart" data-goto="cart">🛒<span class="badge" id="cartBadge">0</span></button>
+      </div>
+    </div>
+
+    <!-- SCREEN -->
+    <div class="screen" id="screen">
+
+      <!-- ===== HOME ===== -->
+      <section class="view active" data-view="home">
+        <div class="hero">
+          <span class="eyebrow" data-i18n="hero_eyebrow">Collection 2026 · Drop 01</span>
+          <span class="wake-logo">WAKE</span>
+          <p data-i18n="hero_sub">Réveille ton style. Streetwear premium, séries limitées.</p>
+          <button class="btn btn-primary" data-goto="shop"><span data-i18n="hero_cta">Voir la boutique</span> →</button>
+          <button class="btn btn-google" data-goto="account">
+            <svg class="g-logo" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            <span data-i18n="google_btn">Continuer avec Google</span>
+          </button>
+        </div>
+
+        <div class="sec-title"><h2 data-i18n="best_title">Best-sellers</h2><a data-goto="shop" data-i18n="see_all">Tout voir →</a></div>
+        <div class="grid" id="homeGrid"></div>
+      </section>
+
+      <!-- ===== SHOP ===== -->
+      <section class="view" data-view="shop">
+        <div class="sec-title" style="margin-top:4px;"><h2 data-i18n="nav_shop">Boutique</h2></div>
+        <div class="chips-row" id="catRow"></div>
+        <div class="grid" id="shopGrid" style="margin-top:10px;"></div>
+      </section>
+
+      <!-- ===== CART ===== -->
+      <section class="view" data-view="cart">
+        <div class="sec-title" style="margin-top:4px;"><h2 data-i18n="cart_title">Panier</h2></div>
+        <div id="cartList"></div>
+      </section>
+
+      <!-- ===== ACCOUNT (login / signup / otp) ===== -->
+      <section class="view" data-view="account">
+        <!-- LOGIN -->
+        <div class="auth-card" id="loginCard">
+          <h2 data-i18n="login_title">Connexion</h2>
+          <p class="sub" data-i18n="login_sub">Heureux de te revoir 👋</p>
+          <div class="field"><label data-i18n="email">E-mail</label><input type="email" id="loginEmail" placeholder="toi@email.com"></div>
+          <div class="field"><label data-i18n="password">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+          <button class="btn btn-primary" data-i18n="login_btn" onclick="WAKE.toast(WAKE.t('login_ok'))">Se connecter</button>
+          <div class="divider" data-i18n="or">ou</div>
+          <button class="btn btn-google">
+            <svg class="g-logo" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            <span data-i18n="google_btn">Continuer avec Google</span>
+          </button>
+          <p class="switch-line"><span data-i18n="no_account">Pas de compte ?</span> <b onclick="WAKE.showAuth('signup')" data-i18n="signup_link">Créer un compte</b></p>
+        </div>
+
+        <!-- SIGNUP -->
+        <div class="auth-card" id="signupCard" style="display:none;">
+          <h2 data-i18n="signup_title">Créer un compte</h2>
+          <p class="sub" data-i18n="signup_sub">Rejoins le mouvement WAKE.</p>
+          <div class="field"><label data-i18n="name">Nom</label><input type="text" placeholder="Ton nom"></div>
+          <div class="field"><label data-i18n="email">E-mail</label><input type="email" id="signupEmail" placeholder="toi@email.com"></div>
+          <div class="field"><label data-i18n="password">Mot de passe</label><input type="password" placeholder="••••••••"></div>
+          <button class="btn btn-primary" data-i18n="signup_btn" onclick="WAKE.showAuth('otp')">S'inscrire</button>
+          <p class="switch-line"><span data-i18n="have_account">Déjà un compte ?</span> <b onclick="WAKE.showAuth('login')" data-i18n="login_link">Se connecter</b></p>
+        </div>
+
+        <!-- OTP -->
+        <div class="auth-card" id="otpCard" style="display:none;">
+          <h2 data-i18n="otp_title">Vérifie ton e-mail</h2>
+          <p class="sub" data-i18n="otp_sub">On t'a envoyé un code à 6 chiffres.</p>
+          <div class="otp-row" id="otpRow">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px;" data-i18n="otp_btn" onclick="WAKE.verifyOtp()">Valider</button>
+          <p class="resend"><span data-i18n="otp_resend">Pas reçu ?</span> <b onclick="WAKE.toast(WAKE.t('otp_sent'))" data-i18n="otp_resend_b">Renvoyer le code</b></p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="tabbar">
+      <button class="tab active" data-goto="home">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
+        <span data-i18n="tab_home">Accueil</span><span class="dot-ind"></span>
+      </button>
+      <button class="tab" data-goto="shop">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a1 1 0 001 1h16a1 1 0 001-1V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+        <span data-i18n="nav_shop">Boutique</span><span class="dot-ind"></span>
+      </button>
+      <button class="tab" data-goto="cart">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>
+        <span data-i18n="cart_title">Panier</span><span class="dot-ind"></span>
+      </button>
+      <button class="tab" data-goto="account">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>
+        <span data-i18n="tab_account">Compte</span><span class="dot-ind"></span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script>
+    const I18N = {
+      fr: {
+        hero_eyebrow:"Collection 2026 · Drop 01", hero_sub:"Réveille ton style. Streetwear premium, séries limitées.",
+        hero_cta:"Voir la boutique", google_btn:"Continuer avec Google", best_title:"Best-sellers", see_all:"Tout voir →",
+        nav_shop:"Boutique", cart_title:"Panier", tab_home:"Accueil", tab_account:"Compte",
+        login_title:"Connexion", login_sub:"Heureux de te revoir 👋", email:"E-mail", password:"Mot de passe",
+        login_btn:"Se connecter", or:"ou", no_account:"Pas de compte ?", signup_link:"Créer un compte",
+        signup_title:"Créer un compte", signup_sub:"Rejoins le mouvement WAKE.", name:"Nom", signup_btn:"S'inscrire",
+        have_account:"Déjà un compte ?", login_link:"Se connecter",
+        otp_title:"Vérifie ton e-mail", otp_sub:"On t'a envoyé un code à 6 chiffres.", otp_btn:"Valider",
+        otp_resend:"Pas reçu ?", otp_resend_b:"Renvoyer le code",
+        cat_all:"Tout", cat_hoodies:"Hoodies", cat_tees:"Tees", cat_pants:"Pantalons", cat_jackets:"Vestes",
+        added:"Ajouté au panier ✓", login_ok:"Connexion réussie ✓", otp_sent:"Code renvoyé ✉️",
+        otp_ok:"Compte vérifié ✓", otp_bad:"Code incomplet", empty_cart:"Ton panier est vide", total:"Total",
+        checkout:"Passer commande", remove:"Retirer"
+      },
+      en: {
+        hero_eyebrow:"2026 Collection · Drop 01", hero_sub:"Wake your style. Premium streetwear, limited runs.",
+        hero_cta:"Shop now", google_btn:"Continue with Google", best_title:"Best-sellers", see_all:"View all →",
+        nav_shop:"Shop", cart_title:"Cart", tab_home:"Home", tab_account:"Account",
+        login_title:"Log in", login_sub:"Good to see you again 👋", email:"Email", password:"Password",
+        login_btn:"Log in", or:"or", no_account:"No account?", signup_link:"Create one",
+        signup_title:"Create account", signup_sub:"Join the WAKE movement.", name:"Name", signup_btn:"Sign up",
+        have_account:"Already have an account?", login_link:"Log in",
+        otp_title:"Verify your email", otp_sub:"We sent you a 6-digit code.", otp_btn:"Verify",
+        otp_resend:"Didn't get it?", otp_resend_b:"Resend code",
+        cat_all:"All", cat_hoodies:"Hoodies", cat_tees:"Tees", cat_pants:"Pants", cat_jackets:"Jackets",
+        added:"Added to cart ✓", login_ok:"Logged in ✓", otp_sent:"Code resent ✉️",
+        otp_ok:"Account verified ✓", otp_bad:"Code incomplete", empty_cart:"Your cart is empty", total:"Total",
+        checkout:"Checkout", remove:"Remove"
+      }
+    };
+
+    const PRODUCTS = [
+      { id:1, cat:"hoodies", name:{fr:'Hoodie "Night"',en:'"Night" Hoodie'}, price:4500, tag:{fr:"Nouveau",en:"New"} },
+      { id:2, cat:"tees", name:{fr:"Heavy Tee Logo",en:"Heavy Logo Tee"}, price:4000, tag:null },
+      { id:3, cat:"pants", name:{fr:"Cargo Tech Pants",en:"Cargo Tech Pants"}, price:5000, tag:{fr:"-20%",en:"-20%"} },
+      { id:4, cat:"jackets", name:{fr:"Bomber Reflective",en:"Reflective Bomber"}, price:6000, tag:null },
+      { id:5, cat:"hoodies", name:{fr:"Zip Hoodie Mono",en:"Mono Zip Hoodie"}, price:3000, tag:null },
+      { id:6, cat:"tees", name:{fr:"Oversized Tee",en:"Oversized Tee"}, price:8000, tag:{fr:"Nouveau",en:"New"} }
+    ];
+    const CATS = ["all","hoodies","tees","pants","jackets"];
+    const CAT_LABEL = { all:"cat_all", hoodies:"cat_hoodies", tees:"cat_tees", pants:"cat_pants", jackets:"cat_jackets" };
+
+    const WAKE = {
+      lang: localStorage.getItem("wake_lang") || "fr",
+      cart: [],
+      filter: "all",
+
+      t(key){ return I18N[this.lang][key] || key; },
+
+      applyLang(){
+        const d = I18N[this.lang];
+        document.documentElement.lang = this.lang;
+        document.querySelectorAll("[data-i18n]").forEach(el=>{ const k=el.getAttribute("data-i18n"); if(d[k]!==undefined) el.textContent=d[k]; });
+        document.getElementById("langLabel").textContent = this.lang.toUpperCase();
+        localStorage.setItem("wake_lang", this.lang);
+        this.renderHome(); this.renderShop(); this.renderCart();
+      },
+      toggleLang(){ this.lang = this.lang==="fr"?"en":"fr"; this.applyLang(); },
+
+      goto(view){
+        document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.dataset.view===view));
+        document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.goto===view));
+        document.getElementById("screen").scrollTop = 0;
+        if(view==="account") this.showAuth("login");
+      },
+
+      cardHTML(p){
+        const tag = p.tag ? `<span class="tag">${p.tag[this.lang]}</span>` : "";
+        return `<article class="card">
+          <div class="card-img">${tag}<span class="wake-logo">WAKE</span></div>
+          <div class="card-body">
+            <span class="cat">${this.t("cat_"+p.cat) || p.cat}</span>
+            <h3>${p.name[this.lang]}</h3>
+            <div class="card-foot"><span class="price">${p.price} Franc CFA</span><button class="add" onclick="WAKE.addToCart(${p.id})">+</button></div>
+          </div></article>`;
+      },
+      renderHome(){ document.getElementById("homeGrid").innerHTML = PRODUCTS.slice(0,4).map(p=>this.cardHTML(p)).join(""); },
+      renderShop(){
+        document.getElementById("catRow").innerHTML = CATS.map(c=>
+          `<button class="cat-chip ${c===this.filter?'active':''}" onclick="WAKE.setFilter('${c}')">${this.t(CAT_LABEL[c])}</button>`).join("");
+        const list = this.filter==="all"?PRODUCTS:PRODUCTS.filter(p=>p.cat===this.filter);
+        document.getElementById("shopGrid").innerHTML = list.map(p=>this.cardHTML(p)).join("");
+      },
+      setFilter(c){ this.filter=c; this.renderShop(); },
+
+      addToCart(id){
+        const ex = this.cart.find(i=>i.id===id);
+        if(ex) ex.qty++; else { const p=PRODUCTS.find(p=>p.id===id); this.cart.push({...p, qty:1}); }
+        this.updateBadge(); this.renderCart(); this.toast(this.t("added"));
+      },
+      changeQty(id,d){
+        const it=this.cart.find(i=>i.id===id); if(!it)return; it.qty+=d;
+        if(it.qty<=0) this.cart=this.cart.filter(i=>i.id!==id);
+        this.updateBadge(); this.renderCart();
+      },
+      updateBadge(){ document.getElementById("cartBadge").textContent = this.cart.reduce((s,i)=>s+i.qty,0); },
+      renderCart(){
+        const el=document.getElementById("cartList");
+        if(!this.cart.length){ el.innerHTML=`<div class="empty"><span class="wake-logo">WAKE</span>${this.t("empty_cart")}</div>`; return; }
+        const total=this.cart.reduce((s,i)=>s+i.price*i.qty,0);
+        el.innerHTML = this.cart.map(i=>`
+          <div class="cart-item">
+            <div class="thumb"><span class="wake-logo">W</span></div>
+            <div class="info"><h4>${i.name[this.lang]}</h4><span>${this.t("cat_"+i.cat)}</span>
+              <div class="qty"><button onclick="WAKE.changeQty(${i.id},-1)">−</button><span>${i.qty}</span><button onclick="WAKE.changeQty(${i.id},1)">+</button></div>
+            </div>
+            <span class="price">${i.price*i.qty} Franc CFA</span>
+          </div>`).join("") +
+          `<div class="cart-total"><span>${this.t("total")}</span><span>${total} Franc CFA</span></div>
+           <button class="btn btn-primary" onclick="WAKE.toast(WAKE.t('login_ok'))">${this.t("checkout")} →</button>`;
+      },
+
+      showAuth(which){
+        document.getElementById("loginCard").style.display = which==="login"?"block":"none";
+        document.getElementById("signupCard").style.display = which==="signup"?"block":"none";
+        document.getElementById("otpCard").style.display = which==="otp"?"block":"none";
+        if(which==="otp"){ const f=document.querySelector("#otpRow input"); if(f) setTimeout(()=>f.focus(),50); }
+      },
+      verifyOtp(){
+        const code=[...document.querySelectorAll("#otpRow input")].map(i=>i.value).join("");
+        if(code.length<6){ this.toast(this.t("otp_bad")); return; }
+        this.toast(this.t("otp_ok")); setTimeout(()=>this.showAuth("login"),900);
+      },
+
+      toast(msg){
+        const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+        clearTimeout(this._tt); this._tt=setTimeout(()=>t.classList.remove("show"),1800);
+      },
+
+      init(){
+        // navigation
+        document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>this.goto(b.dataset.goto)));
+        document.getElementById("langToggle").addEventListener("click",()=>this.toggleLang());
+        // otp auto-advance
+        const otp=[...document.querySelectorAll("#otpRow input")];
+        otp.forEach((inp,idx)=>{
+          inp.addEventListener("input",()=>{ inp.value=inp.value.replace(/\D/g,""); if(inp.value&&otp[idx+1]) otp[idx+1].focus(); });
+          inp.addEventListener("keydown",e=>{ if(e.key==="Backspace"&&!inp.value&&otp[idx-1]) otp[idx-1].focus(); });
+        });
+        this.applyLang(); this.updateBadge();
+      }
+    };
+    WAKE.init();
+  </script>
+</body>
+</html>
