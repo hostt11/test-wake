@@ -1,512 +1,1400 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>WAKE</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    :root {
-      --bg: #060606;
-      --surface: #101012;
-      --surface-2: #16161a;
-      --fg: #f2f2f4;
-      --muted: #8a8a92;
-      --line: #242429;
-      --chrome-1: #ffffff;
-      --chrome-2: #b8b8c0;
-      --chrome-3: #6e6e78;
-      --radius: 18px;
-      --radius-sm: 12px;
-    }
-    html, body { height: 100%; }
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: #000;
-      color: var(--fg);
-      display: flex; justify-content: center; align-items: center;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>WAKE - Marque de vêtements</title>
+    
+    <!-- FontAwesome 6 (gratuit) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ============================================
+                   CSS COMPLET - Thème Light & Dark
+                   ============================================ */
+        
+        /* ----- VARIABLES ----- */
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --gold: #f5a623;
+            --bg: #f5f5f5;
+            --bg-card: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #666;
+            --border: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --sidebar-width: 280px;
+            --bottom-nav-height: 70px;
+            --header-height: 60px;
+        }
 
-    /* ===== PHONE FRAME ===== */
-    .phone {
-      width: 100%;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 860px;
-      background: var(--bg);
-      position: relative;
-      overflow: hidden;
-      display: flex; flex-direction: column;
-      border: 1px solid #1c1c20;
-      border-radius: 0;
-    }
-    @media (min-width: 430px) {
-      .phone { border-radius: 32px; height: 844px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.8); }
-    }
+        [data-theme="dark"] {
+            --bg: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --text: #f0f0f0;
+            --text-secondary: #aaa;
+            --border: #2a2a4a;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
 
-    /* ===== CHROME LOGO ===== */
-    .wake-logo {
-      font-family: 'Metal Mania', cursive;
-      background: linear-gradient(180deg, #ffffff 0%, #d0d0d6 38%, #7a7a82 52%, #c6c6cc 66%, #ffffff 100%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      letter-spacing: .04em;
-      text-shadow: 0 1px 0 rgba(255,255,255,.15);
-      filter: drop-shadow(0 2px 6px rgba(255,255,255,.12));
-    }
+        /* ----- RESET ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    /* ===== HEADER ===== */
-    .topbar {
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 18px 10px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(6,6,6,.9); backdrop-filter: blur(10px);
-    }
-    .topbar .wake-logo { font-size: 1.7rem; line-height: 1; }
-    .top-actions { display: flex; gap: 8px; align-items: center; }
-    .chip {
-      height: 34px; min-width: 34px; padding: 0 10px; border-radius: 11px;
-      background: var(--surface-2); border: 1px solid var(--line); color: var(--fg);
-      font-size: .78rem; font-weight: 600; cursor: pointer;
-      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-      transition: border-color .2s, background .2s;
-    }
-    .chip:active { background: #1d1d22; }
-    .chip .badge {
-      position: absolute; top: -5px; right: -5px;
-      background: #fff; color: #000; font-size: .6rem; font-weight: 800;
-      border-radius: 999px; min-width: 16px; height: 16px; display: grid; place-items: center; padding: 0 4px;
-    }
-    .chip-cart { position: relative; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            padding-bottom: calc(var(--bottom-nav-height) + 20px);
+            padding-top: var(--header-height);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-    /* ===== SCROLL AREA ===== */
-    .screen {
-      flex: 1; overflow-y: auto; overflow-x: hidden;
-      padding: 18px 18px 24px;
-      text-align: center;
-      scrollbar-width: none;
-    }
-    .screen::-webkit-scrollbar { display: none; }
-    .view { display: none; animation: fade .3s ease; }
-    .view.active { display: block; }
-    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        /* ----- HEADER ----- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
 
-    /* ===== HERO ===== */
-    .hero {
-      border-radius: var(--radius);
-      padding: 30px 18px;
-      background:
-        radial-gradient(220px 140px at 50% 0%, rgba(255,255,255,.10), transparent 70%),
-        linear-gradient(180deg, #131316, #0a0a0c);
-      border: 1px solid var(--line);
-      margin-bottom: 18px;
-    }
-    .hero .wake-logo { font-size: 3.4rem; line-height: 1; display: block; margin-bottom: 6px; }
-    .hero .eyebrow {
-      display: inline-block; font-size: .64rem; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--muted); border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; margin-bottom: 16px;
-    }
-    .hero p { color: var(--muted); font-size: .85rem; max-width: 26ch; margin: 0 auto 18px; }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      width: 100%; padding: 13px 18px; border-radius: var(--radius-sm);
-      font-weight: 600; font-size: .9rem; cursor: pointer; border: 1px solid transparent;
-      transition: transform .15s, background .2s;
-    }
-    .btn:active { transform: scale(.98); }
-    .btn-primary { background: linear-gradient(180deg, #fff, #d4d4da); color: #000; }
-    .btn-ghost { background: var(--surface-2); color: var(--fg); border-color: var(--line); margin-top: 9px; }
-    .btn-google { background: #fff; color: #1f1f1f; margin-top: 9px; }
-    .g-logo { width: 16px; height: 16px; }
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+            padding: 4px;
+        }
 
-    /* ===== SECTION TITLE ===== */
-    .sec-title {
-      display: flex; align-items: center; justify-content: space-between;
-      margin: 22px 2px 12px; text-align: left;
-    }
-    .sec-title h2 { font-size: 1.05rem; font-weight: 700; }
-    .sec-title a { color: var(--muted); font-size: .76rem; cursor: pointer; }
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--accent);
+        }
+        .logo span { color: var(--text); }
 
-    /* ===== CHIP ROW (categories) ===== */
-    .chips-row { display: flex; gap: 8px; overflow-x: auto; padding: 2px; margin-bottom: 6px; scrollbar-width: none; }
-    .chips-row::-webkit-scrollbar { display: none; }
-    .cat-chip {
-      flex-shrink: 0; padding: 8px 15px; border-radius: 999px; font-size: .78rem; font-weight: 500;
-      background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); cursor: pointer; transition: all .2s;
-    }
-    .cat-chip.active { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
-    /* ===== PRODUCTS GRID ===== */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .card {
-      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-      overflow: hidden; text-align: left; transition: transform .15s, border-color .2s;
-    }
-    .card:active { transform: scale(.98); }
-    .card-img {
-      aspect-ratio: 1/1.15; position: relative; display: grid; place-items: center;
-      background: radial-gradient(120px 90px at 50% 25%, rgba(255,255,255,.08), transparent), linear-gradient(135deg, #18181c, #0d0d10);
-    }
-    .card-img .wake-logo { font-size: 1.6rem; opacity: .5; }
-    .tag {
-      position: absolute; top: 9px; left: 9px; background: #fff; color: #000;
-      font-size: .58rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
-    }
-    .card-body { padding: 11px 12px 13px; }
-    .card-body .cat { color: var(--muted); font-size: .68rem; letter-spacing: .03em; }
-    .card-body h3 { font-size: .82rem; font-weight: 600; margin: 3px 0 0; line-height: 1.25; }
-    .card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; }
-    .price { font-weight: 800; font-size: .92rem; }
-    .add {
-      background: var(--surface-2); border: 1px solid var(--line); color: var(--fg);
-      border-radius: 9px; width: 30px; height: 30px; cursor: pointer; font-size: 1.05rem; transition: all .15s;
-    }
-    .add:active { background: #fff; color: #000; }
+        .header-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text);
+            cursor: pointer;
+            position: relative;
+            padding: 4px;
+        }
 
-    /* ===== ACCOUNT / AUTH ===== */
-    .auth-card {
-      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 22px 18px; margin-bottom: 14px;
-    }
-    .auth-card h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
-    .auth-card p.sub { color: var(--muted); font-size: .82rem; margin-bottom: 18px; }
-    .field { text-align: left; margin-bottom: 12px; }
-    .field label { display: block; font-size: .72rem; color: var(--muted); margin-bottom: 5px; padding-left: 4px; }
-    .field input {
-      width: 100%; padding: 12px 14px; border-radius: var(--radius-sm);
-      background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); font-size: .9rem; outline: none;
-    }
-    .field input:focus { border-color: #5a5a64; }
-    .divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .72rem; margin: 16px 0; }
-    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-    .switch-line { font-size: .8rem; color: var(--muted); margin-top: 16px; }
-    .switch-line b { color: var(--fg); cursor: pointer; }
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--accent);
+            color: white;
+            font-size: 10px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
 
-    /* ===== OTP (code 6 chiffres) ===== */
-    .otp-row { display: flex; gap: 8px; justify-content: center; margin: 8px 0 4px; }
-    .otp-row input {
-      width: 44px; height: 52px; text-align: center; font-size: 1.3rem; font-weight: 700;
-      border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); outline: none;
-    }
-    .otp-row input:focus { border-color: #fff; }
-    .resend { color: var(--muted); font-size: .76rem; margin-top: 14px; }
-    .resend b { color: var(--fg); cursor: pointer; }
+        .lang-toggle {
+            display: flex;
+            gap: 4px;
+            background: var(--bg);
+            border-radius: 20px;
+            padding: 3px;
+            border: 1px solid var(--border);
+        }
 
-    /* ===== CART ===== */
-    .cart-item {
-      display: flex; gap: 12px; align-items: center; text-align: left;
-      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
-      padding: 10px; margin-bottom: 10px;
-    }
-    .cart-item .thumb {
-      width: 54px; height: 60px; border-radius: 9px; flex-shrink: 0;
-      background: linear-gradient(135deg, #18181c, #0d0d10); display: grid; place-items: center;
-    }
-    .cart-item .thumb .wake-logo { font-size: .8rem; opacity: .5; }
-    .cart-item .info { flex: 1; }
-    .cart-item .info h4 { font-size: .82rem; font-weight: 600; }
-    .cart-item .info span { font-size: .72rem; color: var(--muted); }
-    .cart-item .price { font-size: .85rem; }
-    .qty { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-    .qty button { width: 22px; height: 22px; border-radius: 7px; background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); cursor: pointer; font-size: .9rem; }
-    .qty span { font-size: .8rem; min-width: 16px; text-align: center; }
-    .cart-total {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 4px; font-weight: 700; font-size: 1rem; border-top: 1px solid var(--line); margin-top: 6px;
-    }
-    .empty { color: var(--muted); padding: 50px 20px; font-size: .9rem; }
-    .empty .wake-logo { font-size: 2.4rem; display: block; margin-bottom: 12px; opacity: .4; }
+        .lang-btn {
+            background: none;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+        }
 
-    /* ===== BOTTOM NAV ===== */
-    .tabbar {
-      flex-shrink: 0; display: flex; justify-content: space-around; align-items: center;
-      padding: 9px 6px calc(9px + env(safe-area-inset-bottom));
-      border-top: 1px solid var(--line); background: rgba(8,8,9,.95); backdrop-filter: blur(12px);
-    }
-    .tab {
-      background: none; border: none; cursor: pointer; color: var(--muted);
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      font-size: .62rem; font-weight: 500; padding: 5px 12px; border-radius: 12px; transition: color .2s;
-    }
-    .tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; }
-    .tab.active { color: var(--fg); }
-    .tab .dot-ind { width: 4px; height: 4px; border-radius: 999px; background: #fff; opacity: 0; transition: opacity .2s; }
-    .tab.active .dot-ind { opacity: 1; }
+        /* ----- SIDEBAR ----- */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .sidebar-overlay.open {
+            display: block;
+            opacity: 1;
+        }
 
-    /* toast */
-    .toast {
-      position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: #fff; color: #000; font-size: .8rem; font-weight: 600; padding: 10px 18px;
-      border-radius: 999px; opacity: 0; pointer-events: none; transition: all .3s; z-index: 30; white-space: nowrap;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  </style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: var(--sidebar-width);
+            max-width: 85%;
+            height: 100%;
+            background: var(--bg-card);
+            z-index: 2001;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 24px 16px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+        }
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-user h4 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .sidebar-user p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--bg);
+        }
+        .sidebar-menu a i {
+            width: 22px;
+            text-align: center;
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+        .sidebar-menu a.active i {
+            color: var(--accent);
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+
+        .sidebar-logout {
+            margin-top: 20px;
+            color: var(--accent) !important;
+        }
+        .sidebar-logout i {
+            color: var(--accent) !important;
+        }
+
+        /* ----- BOTTOM NAV ----- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--bottom-nav-height);
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+            transition: background 0.3s;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            cursor: pointer;
+            padding: 4px 12px;
+            transition: color 0.2s;
+            position: relative;
+            text-decoration: none;
+        }
+        .nav-item i {
+            font-size: 22px;
+            transition: transform 0.2s;
+        }
+        .nav-item.active {
+            color: var(--accent);
+        }
+        .nav-item.active i {
+            transform: scale(1.1);
+        }
+        .nav-item .badge {
+            position: absolute;
+            top: 0;
+            right: 4px;
+            background: var(--accent);
+            color: white;
+            font-size: 9px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* ----- PAGES CONTAINER ----- */
+        .page {
+            display: none;
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ----- FLOATING CART ----- */
+        .cart-float {
+            position: fixed;
+            bottom: calc(var(--bottom-nav-height) + 20px);
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.4);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        .cart-float:active {
+            transform: scale(0.9);
+        }
+        .cart-float .count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--gold);
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* ----- CARDS / GRID ----- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .product-card:active {
+            transform: scale(0.97);
+        }
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: var(--bg);
+        }
+        .product-card .info {
+            padding: 12px;
+        }
+        .product-card .info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .product-card .info .price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .product-card .info .old-price {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        /* ----- MODAL ----- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 3000;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: var(--radius) var(--radius) 0 0;
+            padding: 24px 20px;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            padding-bottom: 40px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* ----- FORM ELEMENTS ----- */
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            transition: border 0.2s;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: white;
+        }
+        .btn-google {
+            background: #4285F4;
+            color: white;
+        }
+
+        /* ----- UTILITIES ----- */
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gap-8 { gap: 8px; }
+        .gap-12 { gap: 12px; }
+        .gap-16 { gap: 16px; }
+        .mt-8 { margin-top: 8px; }
+        .mt-16 { margin-top: 16px; }
+        .mt-24 { margin-top: 24px; }
+        .mb-8 { margin-bottom: 8px; }
+        .mb-16 { margin-bottom: 16px; }
+        .text-center { text-align: center; }
+        .text-secondary { color: var(--text-secondary); }
+        .text-accent { color: var(--accent); }
+        .text-gold { color: var(--gold); }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .row > * { flex: 1; min-width: 140px; }
+
+        /* ----- CATEGORY TABS ----- */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-tabs::-webkit-scrollbar { display: none; }
+        .category-tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .category-tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* ----- NOTIFICATION TOAST ----- */
+        .toast-container {
+            position: fixed;
+            top: calc(var(--header-height) + 12px);
+            right: 12px;
+            left: 12px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            border-left: 4px solid var(--accent);
+            pointer-events: all;
+            animation: slideDown 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success { border-left-color: #22c55e; }
+        .toast.error { border-left-color: #ef4444; }
+        .toast i { font-size: 20px; }
+        .toast .msg { flex: 1; font-size: 14px; font-weight: 500; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .product-card img {
+                height: 150px;
+            }
+            .modal-content {
+                padding: 20px 16px;
+            }
+            .header {
+                padding: 0 12px;
+            }
+            .logo {
+                font-size: 18px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .bottom-nav {
+                display: none;
+            }
+            body {
+                padding-bottom: 20px;
+            }
+            .cart-float {
+                bottom: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="phone">
 
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <span class="wake-logo">WAKE</span>
-      <div class="top-actions">
-        <button class="chip" id="langToggle">🌐<span id="langLabel">FR</span></button>
-        <button class="chip chip-cart" data-goto="cart">🛒<span class="badge" id="cartBadge">0</span></button>
-      </div>
-    </div>
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
 
-    <!-- SCREEN -->
-    <div class="screen" id="screen">
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">WAKE<span>.</span></div>
+        </div>
+        <div class="header-right">
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="fr">FR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="header-btn" id="themeBtn" aria-label="Thème">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <button class="header-btn" id="notifBtn" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notif-badge" id="notifBadge">3</span>
+            </button>
+        </div>
+    </header>
 
-      <!-- ===== HOME ===== -->
-      <section class="view active" data-view="home">
-        <div class="hero">
-          <span class="eyebrow" data-i18n="hero_eyebrow">Collection 2026 · Drop 01</span>
-          <span class="wake-logo">WAKE</span>
-          <p data-i18n="hero_sub">Réveille ton style. Streetwear premium, séries limitées.</p>
-          <button class="btn btn-primary" data-goto="shop"><span data-i18n="hero_cta">Voir la boutique</span> →</button>
-          <button class="btn btn-google" data-goto="account">
-            <svg class="g-logo" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-            <span data-i18n="google_btn">Continuer avec Google</span>
-          </button>
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-profile">
+            <div class="sidebar-avatar" id="sidebarAvatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="sidebar-user">
+                <h4 id="sidebarName">Invité</h4>
+                <p id="sidebarEmail">Non connecté</p>
+            </div>
         </div>
 
-        <div class="sec-title"><h2 data-i18n="best_title">Best-sellers</h2><a data-goto="shop" data-i18n="see_all">Tout voir →</a></div>
-        <div class="grid" id="homeGrid"></div>
-      </section>
-
-      <!-- ===== SHOP ===== -->
-      <section class="view" data-view="shop">
-        <div class="sec-title" style="margin-top:4px;"><h2 data-i18n="nav_shop">Boutique</h2></div>
-        <div class="chips-row" id="catRow"></div>
-        <div class="grid" id="shopGrid" style="margin-top:10px;"></div>
-      </section>
-
-      <!-- ===== CART ===== -->
-      <section class="view" data-view="cart">
-        <div class="sec-title" style="margin-top:4px;"><h2 data-i18n="cart_title">Panier</h2></div>
-        <div id="cartList"></div>
-      </section>
-
-      <!-- ===== ACCOUNT (login / signup / otp) ===== -->
-      <section class="view" data-view="account">
-        <!-- LOGIN -->
-        <div class="auth-card" id="loginCard">
-          <h2 data-i18n="login_title">Connexion</h2>
-          <p class="sub" data-i18n="login_sub">Heureux de te revoir 👋</p>
-          <div class="field"><label data-i18n="email">E-mail</label><input type="email" id="loginEmail" placeholder="toi@email.com"></div>
-          <div class="field"><label data-i18n="password">Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••"></div>
-          <button class="btn btn-primary" data-i18n="login_btn" onclick="WAKE.toast(WAKE.t('login_ok'))">Se connecter</button>
-          <div class="divider" data-i18n="or">ou</div>
-          <button class="btn btn-google">
-            <svg class="g-logo" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-            <span data-i18n="google_btn">Continuer avec Google</span>
-          </button>
-          <p class="switch-line"><span data-i18n="no_account">Pas de compte ?</span> <b onclick="WAKE.showAuth('signup')" data-i18n="signup_link">Créer un compte</b></p>
-        </div>
-
-        <!-- SIGNUP -->
-        <div class="auth-card" id="signupCard" style="display:none;">
-          <h2 data-i18n="signup_title">Créer un compte</h2>
-          <p class="sub" data-i18n="signup_sub">Rejoins le mouvement WAKE.</p>
-          <div class="field"><label data-i18n="name">Nom</label><input type="text" placeholder="Ton nom"></div>
-          <div class="field"><label data-i18n="email">E-mail</label><input type="email" id="signupEmail" placeholder="toi@email.com"></div>
-          <div class="field"><label data-i18n="password">Mot de passe</label><input type="password" placeholder="••••••••"></div>
-          <button class="btn btn-primary" data-i18n="signup_btn" onclick="WAKE.showAuth('otp')">S'inscrire</button>
-          <p class="switch-line"><span data-i18n="have_account">Déjà un compte ?</span> <b onclick="WAKE.showAuth('login')" data-i18n="login_link">Se connecter</b></p>
-        </div>
-
-        <!-- OTP -->
-        <div class="auth-card" id="otpCard" style="display:none;">
-          <h2 data-i18n="otp_title">Vérifie ton e-mail</h2>
-          <p class="sub" data-i18n="otp_sub">On t'a envoyé un code à 6 chiffres.</p>
-          <div class="otp-row" id="otpRow">
-            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
-            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
-          </div>
-          <button class="btn btn-primary" style="margin-top:16px;" data-i18n="otp_btn" onclick="WAKE.verifyOtp()">Valider</button>
-          <p class="resend"><span data-i18n="otp_resend">Pas reçu ?</span> <b onclick="WAKE.toast(WAKE.t('otp_sent'))" data-i18n="otp_resend_b">Renvoyer le code</b></p>
-        </div>
-      </section>
-
-    </div>
-
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
-
-    <!-- BOTTOM NAV -->
-    <nav class="tabbar">
-      <button class="tab active" data-goto="home">
-        <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
-        <span data-i18n="tab_home">Accueil</span><span class="dot-ind"></span>
-      </button>
-      <button class="tab" data-goto="shop">
-        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a1 1 0 001 1h16a1 1 0 001-1V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
-        <span data-i18n="nav_shop">Boutique</span><span class="dot-ind"></span>
-      </button>
-      <button class="tab" data-goto="cart">
-        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>
-        <span data-i18n="cart_title">Panier</span><span class="dot-ind"></span>
-      </button>
-      <button class="tab" data-goto="account">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>
-        <span data-i18n="tab_account">Compte</span><span class="dot-ind"></span>
-      </button>
+        <ul class="sidebar-menu">
+            <li><a class="active" data-page="home"><i class="fas fa-house"></i> <span data-i18n="home">Accueil</span></a></li>
+            <li><a data-page="shop"><i class="fas fa-store"></i> <span data-i18n="shop">Boutique</span></a></li>
+            <li><a data-page="events"><i class="fas fa-calendar-days"></i> <span data-i18n="events">Événements</span></a></li>
+            <li><a data-page="transactions"><i class="fas fa-receipt"></i> <span data-i18n="transactions">Transactions</span></a></li>
+            <li><a data-page="orders"><i class="fas fa-truck"></i> <span data-i18n="orders">Commandes</span></a></li>
+            <li><a data-page="support"><i class="fas fa-headset"></i> <span data-i18n="support">Support</span></a></li>
+            <li><a data-page="profile"><i class="fas fa-user"></i> <span data-i18n="profile">Profil</span></a></li>
+            <li class="sidebar-divider"></li>
+            <li><a data-page="settings"><i class="fas fa-gear"></i> <span data-i18n="settings">Paramètres</span></a></li>
+            <li><a data-page="about"><i class="fas fa-info-circle"></i> <span data-i18n="about">À propos</span></a></li>
+            <li class="sidebar-divider"></li>
+            <li><a class="sidebar-logout" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> <span data-i18n="logout">Déconnexion</span></a></li>
+        </ul>
     </nav>
 
-  </div>
+    <!-- ===== PAGES ===== -->
 
-  <script>
-    const I18N = {
-      fr: {
-        hero_eyebrow:"Collection 2026 · Drop 01", hero_sub:"Réveille ton style. Streetwear premium, séries limitées.",
-        hero_cta:"Voir la boutique", google_btn:"Continuer avec Google", best_title:"Best-sellers", see_all:"Tout voir →",
-        nav_shop:"Boutique", cart_title:"Panier", tab_home:"Accueil", tab_account:"Compte",
-        login_title:"Connexion", login_sub:"Heureux de te revoir 👋", email:"E-mail", password:"Mot de passe",
-        login_btn:"Se connecter", or:"ou", no_account:"Pas de compte ?", signup_link:"Créer un compte",
-        signup_title:"Créer un compte", signup_sub:"Rejoins le mouvement WAKE.", name:"Nom", signup_btn:"S'inscrire",
-        have_account:"Déjà un compte ?", login_link:"Se connecter",
-        otp_title:"Vérifie ton e-mail", otp_sub:"On t'a envoyé un code à 6 chiffres.", otp_btn:"Valider",
-        otp_resend:"Pas reçu ?", otp_resend_b:"Renvoyer le code",
-        cat_all:"Tout", cat_hoodies:"Hoodies", cat_tees:"Tees", cat_pants:"Pantalons", cat_jackets:"Vestes",
-        added:"Ajouté au panier ✓", login_ok:"Connexion réussie ✓", otp_sent:"Code renvoyé ✉️",
-        otp_ok:"Compte vérifié ✓", otp_bad:"Code incomplet", empty_cart:"Ton panier est vide", total:"Total",
-        checkout:"Passer commande", remove:"Retirer"
-      },
-      en: {
-        hero_eyebrow:"2026 Collection · Drop 01", hero_sub:"Wake your style. Premium streetwear, limited runs.",
-        hero_cta:"Shop now", google_btn:"Continue with Google", best_title:"Best-sellers", see_all:"View all →",
-        nav_shop:"Shop", cart_title:"Cart", tab_home:"Home", tab_account:"Account",
-        login_title:"Log in", login_sub:"Good to see you again 👋", email:"Email", password:"Password",
-        login_btn:"Log in", or:"or", no_account:"No account?", signup_link:"Create one",
-        signup_title:"Create account", signup_sub:"Join the WAKE movement.", name:"Name", signup_btn:"Sign up",
-        have_account:"Already have an account?", login_link:"Log in",
-        otp_title:"Verify your email", otp_sub:"We sent you a 6-digit code.", otp_btn:"Verify",
-        otp_resend:"Didn't get it?", otp_resend_b:"Resend code",
-        cat_all:"All", cat_hoodies:"Hoodies", cat_tees:"Tees", cat_pants:"Pants", cat_jackets:"Jackets",
-        added:"Added to cart ✓", login_ok:"Logged in ✓", otp_sent:"Code resent ✉️",
-        otp_ok:"Account verified ✓", otp_bad:"Code incomplete", empty_cart:"Your cart is empty", total:"Total",
-        checkout:"Checkout", remove:"Remove"
-      }
-    };
+    <!-- HOME -->
+    <section class="page active" id="page-home">
+        <h1 data-i18n="welcome">Bienvenue sur WAKE</h1>
+        <p class="text-secondary" data-i18n="subtitle">La marque qui réveille ton style</p>
+        <div class="product-grid" id="homeProducts"></div>
+    </section>
 
-    const PRODUCTS = [
-      { id:1, cat:"hoodies", name:{fr:'Hoodie "Night"',en:'"Night" Hoodie'}, price:4500, tag:{fr:"Nouveau",en:"New"} },
-      { id:2, cat:"tees", name:{fr:"Heavy Tee Logo",en:"Heavy Logo Tee"}, price:4000, tag:null },
-      { id:3, cat:"pants", name:{fr:"Cargo Tech Pants",en:"Cargo Tech Pants"}, price:5000, tag:{fr:"-20%",en:"-20%"} },
-      { id:4, cat:"jackets", name:{fr:"Bomber Reflective",en:"Reflective Bomber"}, price:6000, tag:null },
-      { id:5, cat:"hoodies", name:{fr:"Zip Hoodie Mono",en:"Mono Zip Hoodie"}, price:3000, tag:null },
-      { id:6, cat:"tees", name:{fr:"Oversized Tee",en:"Oversized Tee"}, price:8000, tag:{fr:"Nouveau",en:"New"} }
-    ];
-    const CATS = ["all","hoodies","tees","pants","jackets"];
-    const CAT_LABEL = { all:"cat_all", hoodies:"cat_hoodies", tees:"cat_tees", pants:"cat_pants", jackets:"cat_jackets" };
+    <!-- SHOP -->
+    <section class="page" id="page-shop">
+        <div class="flex-between">
+            <h2 data-i18n="shop">Boutique</h2>
+            <input type="text" id="searchInput" placeholder="Rechercher..." style="max-width:180px;padding:8px 12px;font-size:14px;">
+        </div>
+        <div class="category-tabs" id="categoryTabs">
+            <button class="category-tab active" data-cat="all">ALL</button>
+        </div>
+        <div class="product-grid" id="shopProducts"></div>
+    </section>
 
-    const WAKE = {
-      lang: localStorage.getItem("wake_lang") || "fr",
-      cart: [],
-      filter: "all",
+    <!-- EVENTS -->
+    <section class="page" id="page-events">
+        <h2 data-i18n="events">Événements</h2>
+        <div id="eventsList"></div>
+    </section>
 
-      t(key){ return I18N[this.lang][key] || key; },
+    <!-- TRANSACTIONS -->
+    <section class="page" id="page-transactions">
+        <h2 data-i18n="transactions">Mes transactions</h2>
+        <div id="transactionsList"></div>
+    </section>
 
-      applyLang(){
-        const d = I18N[this.lang];
-        document.documentElement.lang = this.lang;
-        document.querySelectorAll("[data-i18n]").forEach(el=>{ const k=el.getAttribute("data-i18n"); if(d[k]!==undefined) el.textContent=d[k]; });
-        document.getElementById("langLabel").textContent = this.lang.toUpperCase();
-        localStorage.setItem("wake_lang", this.lang);
-        this.renderHome(); this.renderShop(); this.renderCart();
-      },
-      toggleLang(){ this.lang = this.lang==="fr"?"en":"fr"; this.applyLang(); },
+    <!-- ORDERS -->
+    <section class="page" id="page-orders">
+        <h2 data-i18n="orders">Mes commandes</h2>
+        <div id="ordersList"></div>
+    </section>
 
-      goto(view){
-        document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.dataset.view===view));
-        document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.goto===view));
-        document.getElementById("screen").scrollTop = 0;
-        if(view==="account") this.showAuth("login");
-      },
+    <!-- SUPPORT -->
+    <section class="page" id="page-support">
+        <h2 data-i18n="support">Support client</h2>
+        <div class="row mt-16">
+            <a href="#" class="btn btn-outline" style="flex:1"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="#" class="btn btn-outline" style="flex:1"><i class="fas fa-envelope"></i> Email</a>
+        </div>
+        <div class="mt-16" id="chatMessages" style="height:300px;background:var(--bg);border-radius:var(--radius);padding:16px;overflow-y:auto;"></div>
+        <div class="row mt-8">
+            <input type="text" id="chatInput" placeholder="Votre message..." style="flex:1;">
+            <button class="btn btn-primary" style="flex:0 0 auto;width:auto;padding:14px 20px;" id="chatSend"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </section>
 
-      cardHTML(p){
-        const tag = p.tag ? `<span class="tag">${p.tag[this.lang]}</span>` : "";
-        return `<article class="card">
-          <div class="card-img">${tag}<span class="wake-logo">WAKE</span></div>
-          <div class="card-body">
-            <span class="cat">${this.t("cat_"+p.cat) || p.cat}</span>
-            <h3>${p.name[this.lang]}</h3>
-            <div class="card-foot"><span class="price">${p.price} Franc CFA</span><button class="add" onclick="WAKE.addToCart(${p.id})">+</button></div>
-          </div></article>`;
-      },
-      renderHome(){ document.getElementById("homeGrid").innerHTML = PRODUCTS.slice(0,4).map(p=>this.cardHTML(p)).join(""); },
-      renderShop(){
-        document.getElementById("catRow").innerHTML = CATS.map(c=>
-          `<button class="cat-chip ${c===this.filter?'active':''}" onclick="WAKE.setFilter('${c}')">${this.t(CAT_LABEL[c])}</button>`).join("");
-        const list = this.filter==="all"?PRODUCTS:PRODUCTS.filter(p=>p.cat===this.filter);
-        document.getElementById("shopGrid").innerHTML = list.map(p=>this.cardHTML(p)).join("");
-      },
-      setFilter(c){ this.filter=c; this.renderShop(); },
-
-      addToCart(id){
-        const ex = this.cart.find(i=>i.id===id);
-        if(ex) ex.qty++; else { const p=PRODUCTS.find(p=>p.id===id); this.cart.push({...p, qty:1}); }
-        this.updateBadge(); this.renderCart(); this.toast(this.t("added"));
-      },
-      changeQty(id,d){
-        const it=this.cart.find(i=>i.id===id); if(!it)return; it.qty+=d;
-        if(it.qty<=0) this.cart=this.cart.filter(i=>i.id!==id);
-        this.updateBadge(); this.renderCart();
-      },
-      updateBadge(){ document.getElementById("cartBadge").textContent = this.cart.reduce((s,i)=>s+i.qty,0); },
-      renderCart(){
-        const el=document.getElementById("cartList");
-        if(!this.cart.length){ el.innerHTML=`<div class="empty"><span class="wake-logo">WAKE</span>${this.t("empty_cart")}</div>`; return; }
-        const total=this.cart.reduce((s,i)=>s+i.price*i.qty,0);
-        el.innerHTML = this.cart.map(i=>`
-          <div class="cart-item">
-            <div class="thumb"><span class="wake-logo">W</span></div>
-            <div class="info"><h4>${i.name[this.lang]}</h4><span>${this.t("cat_"+i.cat)}</span>
-              <div class="qty"><button onclick="WAKE.changeQty(${i.id},-1)">−</button><span>${i.qty}</span><button onclick="WAKE.changeQty(${i.id},1)">+</button></div>
+    <!-- PROFILE -->
+    <section class="page" id="page-profile">
+        <h2 data-i18n="profile">Profil</h2>
+        <div class="text-center mt-16">
+            <div style="width:100px;height:100px;border-radius:50%;background:var(--accent);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:40px;color:white;overflow:hidden;">
+                <i class="fas fa-user"></i>
             </div>
-            <span class="price">${i.price*i.qty} Franc CFA</span>
-          </div>`).join("") +
-          `<div class="cart-total"><span>${this.t("total")}</span><span>${total} Franc CFA</span></div>
-           <button class="btn btn-primary" onclick="WAKE.toast(WAKE.t('login_ok'))">${this.t("checkout")} →</button>`;
-      },
+            <h3 id="profileName">Utilisateur</h3>
+            <p class="text-secondary" id="profileEmail">email@exemple.com</p>
+            <p class="text-gold font-bold">Code parrainage: <span id="referralCode">WAKE-XXXX</span></p>
+        </div>
+        <div class="mt-16">
+            <button class="btn btn-outline"><i class="fas fa-camera"></i> Changer photo</button>
+            <button class="btn btn-outline mt-8"><i class="fas fa-key"></i> Modifier mot de passe</button>
+        </div>
+    </section>
 
-      showAuth(which){
-        document.getElementById("loginCard").style.display = which==="login"?"block":"none";
-        document.getElementById("signupCard").style.display = which==="signup"?"block":"none";
-        document.getElementById("otpCard").style.display = which==="otp"?"block":"none";
-        if(which==="otp"){ const f=document.querySelector("#otpRow input"); if(f) setTimeout(()=>f.focus(),50); }
-      },
-      verifyOtp(){
-        const code=[...document.querySelectorAll("#otpRow input")].map(i=>i.value).join("");
-        if(code.length<6){ this.toast(this.t("otp_bad")); return; }
-        this.toast(this.t("otp_ok")); setTimeout(()=>this.showAuth("login"),900);
-      },
+    <!-- SETTINGS -->
+    <section class="page" id="page-settings">
+        <h2 data-i18n="settings">Paramètres</h2>
+        <div class="mt-16">
+            <div class="flex-between" style="padding:12px 0;border-bottom:1px solid var(--border);">
+                <span data-i18n="language">Langue</span>
+                <div class="lang-toggle">
+                    <button class="lang-btn active" data-lang="fr">FR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+            </div>
+            <div class="flex-between" style="padding:12px 0;border-bottom:1px solid var(--border);">
+                <span data-i18n="theme">Thème</span>
+                <button class="btn btn-outline" style="width:auto;padding:8px 16px;" id="settingsThemeBtn">
+                    <i class="fas fa-moon"></i> <span id="settingsThemeLabel">Sombre</span>
+                </button>
+            </div>
+            <div class="flex-between" style="padding:12px 0;">
+                <span data-i18n="sessions">Sessions actives</span>
+                <button class="btn btn-outline" style="width:auto;padding:8px 16px;"><i class="fas fa-sign-out-alt"></i> Tout déconnecter</button>
+            </div>
+        </div>
+    </section>
 
-      toast(msg){
-        const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
-        clearTimeout(this._tt); this._tt=setTimeout(()=>t.classList.remove("show"),1800);
-      },
+    <!-- ABOUT -->
+    <section class="page" id="page-about">
+        <h2 data-i18n="about">À propos</h2>
+        <p class="mt-16 text-secondary">WAKE est une marque de vêtements qui réveille votre style. Qualité, confort et design unique.</p>
+    </section>
 
-      init(){
-        // navigation
-        document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>this.goto(b.dataset.goto)));
-        document.getElementById("langToggle").addEventListener("click",()=>this.toggleLang());
-        // otp auto-advance
-        const otp=[...document.querySelectorAll("#otpRow input")];
-        otp.forEach((inp,idx)=>{
-          inp.addEventListener("input",()=>{ inp.value=inp.value.replace(/\D/g,""); if(inp.value&&otp[idx+1]) otp[idx+1].focus(); });
-          inp.addEventListener("keydown",e=>{ if(e.key==="Backspace"&&!inp.value&&otp[idx-1]) otp[idx-1].focus(); });
+    <!-- ===== FLOATING CART ===== -->
+    <button class="cart-float" id="cartFloat">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="count" id="cartCount">0</span>
+    </button>
+
+    <!-- ===== CART MODAL ===== -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-shopping-cart"></i> Mon panier</h3>
+                <button class="modal-close" id="cartClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="cartItems"></div>
+            <div class="flex-between mt-16" style="font-size:18px;font-weight:700;padding-top:12px;border-top:2px solid var(--border);">
+                <span data-i18n="total">Total</span>
+                <span id="cartTotal">0 FCFA</span>
+            </div>
+            <button class="btn btn-primary mt-16" id="cartCheckout" data-i18n="checkout">Payer maintenant</button>
+        </div>
+    </div>
+
+    <!-- ===== PAYMENT MODAL ===== -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card"></i> Paiement</h3>
+                <button class="modal-close" id="paymentClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="paymentForm">
+                <label data-i18n="city">Ville</label>
+                <input type="text" id="payCity" placeholder="Douala">
+                <label class="mt-8" data-i18n="district">Quartier</label>
+                <input type="text" id="payDistrict" placeholder="Bonamoussadi">
+                <label class="mt-8" data-i18n="phone">Téléphone</label>
+                <input type="tel" id="payPhone" placeholder="6XXXXXXXX">
+                <label class="mt-8" data-i18n="promo">Code promo</label>
+                <input type="text" id="payPromo" placeholder="WAKE-20">
+                <div class="mt-16">
+                    <button class="btn btn-primary" id="payNow"><i class="fas fa-check"></i> Confirmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT COMPLET ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // =====================================================
+        // CONFIGURATION (à remplacer par tes clés)
+        // =====================================================
+        const CONFIG = {
+            supabaseUrl: 'https://votre-projet.supabase.co',
+            supabaseKey: 'votre-clé-anon-publique',
+            fapshiApiKey: 'votre-clé-fapshi'
+        };
+
+        // =====================================================
+        // SUPABASE CLIENT
+        // =====================================================
+        const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+
+        // =====================================================
+        // ÉTAT GLOBAL
+        // =====================================================
+        const state = {
+            user: null,
+            cart: [],
+            theme: localStorage.getItem('wake-theme') || 'light',
+            lang: localStorage.getItem('wake-lang') || 'fr',
+            currentPage: 'home',
+            products: [],
+            events: [],
+            transactions: [],
+            orders: []
+        };
+
+        // =====================================================
+        // TRADUCTIONS
+        // =====================================================
+        const i18n = {
+            fr: {
+                home: 'Accueil',
+                shop: 'Boutique',
+                events: 'Événements',
+                transactions: 'Transactions',
+                orders: 'Commandes',
+                support: 'Support',
+                profile: 'Profil',
+                settings: 'Paramètres',
+                about: 'À propos',
+                logout: 'Déconnexion',
+                welcome: 'Bienvenue sur WAKE',
+                subtitle: 'La marque qui réveille ton style',
+                total: 'Total',
+                checkout: 'Payer maintenant',
+                city: 'Ville',
+                district: 'Quartier',
+                phone: 'Téléphone',
+                promo: 'Code promo'
+            },
+            en: {
+                home: 'Home',
+                shop: 'Shop',
+                events: 'Events',
+                transactions: 'Transactions',
+                orders: 'Orders',
+                support: 'Support',
+                profile: 'Profile',
+                settings: 'Settings',
+                about: 'About',
+                logout: 'Logout',
+                welcome: 'Welcome to WAKE',
+                subtitle: 'The brand that awakens your style',
+                total: 'Total',
+                checkout: 'Checkout',
+                city: 'City',
+                district: 'District',
+                phone: 'Phone',
+                promo: 'Promo code'
+            }
+        };
+
+        // =====================================================
+        // THÈME
+        // =====================================================
+        function setTheme(theme) {
+            state.theme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('wake-theme', theme);
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('settingsThemeLabel');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+                if (label) label.textContent = 'Clair';
+            } else {
+                icon.className = 'fas fa-moon';
+                if (label) label.textContent = 'Sombre';
+            }
+        }
+
+        function toggleTheme() {
+            setTheme(state.theme === 'light' ? 'dark' : 'light');
+        }
+
+        // =====================================================
+        // LANGUE
+        // =====================================================
+        function setLang(lang) {
+            state.lang = lang;
+            localStorage.setItem('wake-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (i18n[lang] && i18n[lang][key]) {
+                    el.textContent = i18n[lang][key];
+                }
+            });
+            // Recharger les produits pour les traductions dynamiques
+            renderProducts();
+        }
+
+        // =====================================================
+        // TOAST NOTIFICATIONS
+        // =====================================================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            };
+            toast.innerHTML = `
+                <i class="fas ${icons[type] || icons.info}"></i>
+                <span class="msg">${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // =====================================================
+        // NAVIGATION
+        // =====================================================
+        function navigateTo(page) {
+            state.currentPage = page;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${page}`).classList.add('active');
+            document.querySelectorAll('.sidebar-menu a, .nav-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.page === page);
+            });
+            closeSidebar();
+        }
+
+        // =====================================================
+        // SIDEBAR
+        // =====================================================
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('sidebarOverlay').classList.add('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+        }
+
+        // =====================================================
+        // AUTH
+        // =====================================================
+        async function checkAuth() {
+            const { data } = await supabase.auth.getSession();
+            if (data.session) {
+                state.user = data.session.user;
+                updateUserUI();
+            }
+        }
+
+        function updateUserUI() {
+            if (state.user) {
+                document.getElementById('sidebarName').textContent = state.user.user_metadata?.full_name || state.user.email;
+                document.getElementById('sidebarEmail').textContent = state.user.email;
+                document.getElementById('profileName').textContent = state.user.user_metadata?.full_name || 'Utilisateur';
+                document.getElementById('profileEmail').textContent = state.user.email;
+            }
+        }
+
+        async function logoutUser() {
+            await supabase.auth.signOut();
+            state.user = null;
+            updateUserUI();
+            showToast('Déconnecté', 'success');
+            navigateTo('home');
+        }
+
+        // =====================================================
+        // GOOGLE LOGIN
+        // =====================================================
+        async function loginWithGoogle() {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.origin }
+            });
+            if (error) showToast(error.message, 'error');
+        }
+
+        // =====================================================
+        // PRODUITS
+        // =====================================================
+        async function loadProducts() {
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) {
+                // Données mock pour test
+                state.products = [
+                    { id: 1, name: 'T-shirt WAKE', description: '100% coton', price: 15000, image: 'https://picsum.photos/seed/1/400/400', category: 'tshirt', sizes: ['S','M','L','XL'], colors: ['Noir','Blanc'] },
+                    { id: 2, name: 'Hoodie WAKE', description: 'Coupe oversize', price: 25000, image: 'https://picsum.photos/seed/2/400/400', category: 'hoodie', sizes: ['M','L','XL'], colors: ['Noir','Gris'] },
+                    { id: 3, name: 'Casquette WAKE', description: 'Adjustable', price: 8000, image: 'https://picsum.photos/seed/3/400/400', category: 'accessories', sizes: ['Unique'], colors: ['Noir'] }
+                ];
+                renderProducts();
+                return;
+            }
+            state.products = data || [];
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('shopProducts');
+            const homeContainer = document.getElementById('homeProducts');
+            const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+            const category = document.querySelector('.category-tab.active')?.dataset.cat || 'all';
+
+            let filtered = state.products.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(search) || p.description?.toLowerCase().includes(search);
+                const matchCat = category === 'all' || p.category === category;
+                return matchSearch && matchCat;
+            });
+
+            const render = (products) => {
+                if (!products.length) {
+                    return '<p class="text-secondary text-center mt-16">Aucun produit trouvé</p>';
+                }
+                return products.map(p => `
+                    <div class="product-card" onclick="showProductDetails('${p.id}')">
+                        <img src="${p.image || 'https://picsum.photos/seed/${p.id}/400/400'}" alt="${p.name}" loading="lazy">
+                        <div class="info">
+                            <h4>${p.name}</h4>
+                            <div class="price">${p.price.toLocaleString()} FCFA</div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            if (container) container.innerHTML = render(filtered);
+            if (homeContainer) homeContainer.innerHTML = render(state.products.slice(0, 6));
+        }
+
+        // =====================================================
+        // PANIER
+        // =====================================================
+        function addToCart(productId, size, color, quantity = 1) {
+            const product = state.products.find(p => p.id == productId);
+            if (!product) return;
+            const existing = state.cart.find(item => item.id == productId && item.size === size && item.color === color);
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                state.cart.push({ ...product, size, color, quantity });
+            }
+            updateCartUI();
+            showToast(`${product.name} ajouté au panier`, 'success');
+        }
+
+        function removeFromCart(index) {
+            state.cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+            const total = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            document.getElementById('cartTotal').textContent = total.toLocaleString() + ' FCFA';
+            const container = document.getElementById('cartItems');
+            if (container) {
+                if (!state.cart.length) {
+                    container.innerHTML = '<p class="text-secondary text-center">Panier vide</p>';
+                    return;
+                }
+                container.innerHTML = state.cart.map((item, i) => `
+                    <div class="flex-between" style="padding:8px 0;border-bottom:1px solid var(--border);">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <span class="text-secondary" style="font-size:13px;"> ${item.size} - ${item.color}</span>
+                            <div>${item.quantity} × ${item.price.toLocaleString()} FCFA</div>
+                        </div>
+                        <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--accent);font-size:18px;cursor:pointer;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // =====================================================
+        // ÉVÉNEMENTS
+        // =====================================================
+        async function loadEvents() {
+            const { data, error } = await supabase
+                .from('events')
+                .select('*')
+                .order('date', { ascending: true });
+            if (error) {
+                state.events = [
+                    { id: 1, name: 'WAKE FASHION SHOW', description: 'Défilé de mode', price: 5000, image: 'https://picsum.photos/seed/event1/600/400', date: '2026-07-15' }
+                ];
+                renderEvents();
+                return;
+            }
+            state.events = data || [];
+            renderEvents();
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('eventsList');
+            if (!container) return;
+            if (!state.events.length) {
+                container.innerHTML = '<p class="text-secondary text-center mt-16">Aucun événement à venir</p>';
+                return;
+            }
+            container.innerHTML = state.events.map(e => `
+                <div style="background:var(--bg-card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-top:16px;">
+                    <img src="${e.image || 'https://picsum.photos/seed/${e.id}/600/400'}" alt="${e.name}" style="width:100%;height:200px;object-fit:cover;">
+                    <div style="padding:16px;">
+                        <h3>${e.name}</h3>
+                        <p class="text-secondary">${e.description}</p>
+                        <div class="flex-between mt-8">
+                            <span class="text-accent font-bold">${e.price.toLocaleString()} FCFA</span>
+                            <button class="btn btn-primary" style="width:auto;padding:8px 20px;" onclick="buyEventPass('${e.id}')">
+                                <i class="fas fa-ticket"></i> Pass
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // =====================================================
+        // NOTIFICATIONS
+        // =====================================================
+        function toggleNotifications() {
+            const badge = document.getElementById('notifBadge');
+            const count = parseInt(badge.textContent) || 0;
+            if (count > 0) {
+                showToast('Notifications lues', 'success');
+                badge.textContent = '0';
+                badge.style.display = 'none';
+            } else {
+                badge.style.display = 'flex';
+                badge.textContent = '3';
+            }
+        }
+
+        // =====================================================
+        // INITIALISATION
+        // =====================================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Thème
+            setTheme(state.theme);
+
+            // Langue
+            setLang(state.lang);
+
+            // Auth
+            await checkAuth();
+
+            // Charger données
+            await loadProducts();
+            await loadEvents();
+
+            // Événements UI
+            document.getElementById('menuBtn').addEventListener('click', openSidebar);
+            document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+
+            document.querySelectorAll('.sidebar-menu a[data-page], .nav-item[data-page]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigateTo(el.dataset.page);
+                });
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLang(btn.dataset.lang));
+            });
+
+            document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+            document.getElementById('settingsThemeBtn')?.addEventListener('click', toggleTheme);
+
+            document.getElementById('notifBtn').addEventListener('click', toggleNotifications);
+
+            document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+
+            // Panier
+            document.getElementById('cartFloat').addEventListener('click', () => {
+                document.getElementById('cartModal').classList.add('open');
+                updateCartUI();
+            });
+            document.getElementById('cartClose').addEventListener('click', () => {
+                document.getElementById('cartModal').classList.remove('open');
+            });
+
+            // Recherche
+            document.getElementById('searchInput')?.addEventListener('input', renderProducts);
+
+            // Catégories
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderProducts();
+                });
+            });
+
+            // Paiement
+            document.getElementById('cartCheckout')?.addEventListener('click', () => {
+                document.getElementById('cartModal').classList.remove('open');
+                document.getElementById('paymentModal').classList.add('open');
+            });
+            document.getElementById('paymentClose').addEventListener('click', () => {
+                document.getElementById('paymentModal').classList.remove('open');
+            });
+
+            document.getElementById('payNow')?.addEventListener('click', async () => {
+                const city = document.getElementById('payCity').value;
+                const district = document.getElementById('payDistrict').value;
+                const phone = document.getElementById('payPhone').value;
+                const promo = document.getElementById('payPromo').value;
+
+                if (!city || !district || !phone) {
+                    showToast('Veuillez remplir tous les champs', 'error');
+                    return;
+                }
+
+                showToast('Paiement en cours...', 'info');
+                // Ici intégration Fapshi
+                // await processPayment(state.cart, { city, district, phone, promo });
+                showToast('Paiement réussi ! Commande confirmée.', 'success');
+                document.getElementById('paymentModal').classList.remove('open');
+                state.cart = [];
+                updateCartUI();
+            });
+
+            // Chat
+            document.getElementById('chatSend')?.addEventListener('click', () => {
+                const input = document.getElementById('chatInput');
+                if (input.value.trim()) {
+                    const container = document.getElementById('chatMessages');
+                    container.innerHTML += `<div style="text-align:right;margin:8px 0;"><span style="background:var(--accent);color:white;padding:8px 16px;border-radius:16px;">${input.value}</span></div>`;
+                    input.value = '';
+                    container.scrollTop = container.scrollHeight;
+                    // Simuler réponse
+                    setTimeout(() => {
+                        container.innerHTML += `<div style="text-align:left;margin:8px 0;"><span style="background:var(--bg);padding:8px 16px;border-radius:16px;">Merci pour votre message, nous vous répondons dans quelques instants.</span></div>`;
+                        container.scrollTop = container.scrollHeight;
+                    }, 1000);
+                }
+            });
+
+            // Navigation basse (mobile)
+            const bottomNav = document.createElement('div');
+            bottomNav.className = 'bottom-nav';
+            bottomNav.innerHTML = `
+                <button class="nav-item active" data-page="home"><i class="fas fa-house"></i><span data-i18n="home">Accueil</span></button>
+                <button class="nav-item" data-page="shop"><i class="fas fa-store"></i><span data-i18n="shop">Boutique</span></button>
+                <button class="nav-item" data-page="events"><i class="fas fa-calendar-days"></i><span data-i18n="events">Events</span></button>
+                <button class="nav-item" data-page="transactions"><i class="fas fa-receipt"></i><span data-i18n="transactions">Trans</span></button>
+                <button class="nav-item" data-page="profile"><i class="fas fa-user"></i><span data-i18n="profile">Profil</span></button>
+            `;
+            document.body.appendChild(bottomNav);
+            bottomNav.querySelectorAll('.nav-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    bottomNav.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    el.classList.add('active');
+                    navigateTo(el.dataset.page);
+                });
+            });
+
+            console.log('🚀 WAKE est prêt !');
         });
-        this.applyLang(); this.updateBadge();
-      }
-    };
-    WAKE.init();
-  </script>
+
+        // =====================================================
+        // FONCTIONS GLOBALES (accessibles depuis HTML)
+        // =====================================================
+        window.showProductDetails = function(productId) {
+            const product = state.products.find(p => p.id == productId);
+            if (!product) return;
+            // Simuler un modal de détail
+            showToast(`${product.name} - ${product.price.toLocaleString()} FCFA`, 'info');
+            // Ici tu ouvres un vrai modal avec les détails
+            // Pour l'instant on ajoute au panier avec des valeurs par défaut
+            addToCart(productId, product.sizes?.[0] || 'M', product.colors?.[0] || 'Noir');
+        };
+
+        window.buyEventPass = function(eventId) {
+            const event = state.events.find(e => e.id == eventId);
+            if (!event) return;
+            if (!state.user) {
+                showToast('Veuillez vous connecter pour acheter un pass', 'error');
+                return;
+            }
+            showToast(`Pass pour "${event.name}" ajouté au panier`, 'success');
+            // Ajouter le pass comme un produit
+            state.cart.push({
+                id: `event-${eventId}`,
+                name: `Pass: ${event.name}`,
+                price: event.price,
+                quantity: 1,
+                image: event.image,
+                size: 'Unique',
+                color: 'N/A'
+            });
+            updateCartUI();
+        };
+
+        window.removeFromCart = removeFromCart;
+        window.addToCart = addToCart;
+    </script>
 </body>
 </html>
