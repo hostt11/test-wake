@@ -1,1400 +1,182 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WAKE - Marque de vêtements</title>
-    
-    <!-- FontAwesome 6 (gratuit) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - WAKE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ============================================
-                   CSS COMPLET - Thème Light & Dark
-                   ============================================ */
-        
-        /* ----- VARIABLES ----- */
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
         :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #e94560;
-            --gold: #f5a623;
-            --bg: #f5f5f5;
-            --bg-card: #ffffff;
-            --text: #1a1a2e;
-            --text-secondary: #666;
-            --border: #e0e0e0;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --radius: 16px;
-            --sidebar-width: 280px;
-            --bottom-nav-height: 70px;
-            --header-height: 60px;
-        }
-
-        [data-theme="dark"] {
-            --bg: #0f0f1a;
-            --bg-card: #1a1a2e;
-            --text: #f0f0f0;
-            --text-secondary: #aaa;
-            --border: #2a2a4a;
-            --shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
-
-        /* ----- RESET ----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: background 0.3s, color 0.3s;
-            padding-bottom: calc(var(--bottom-nav-height) + 20px);
-            padding-top: var(--header-height);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* ----- HEADER ----- */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--header-height);
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            z-index: 1000;
-            transition: background 0.3s;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--text);
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            color: var(--accent);
-        }
-        .logo span { color: var(--text); }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .header-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: var(--text);
-            cursor: pointer;
-            position: relative;
-            padding: 4px;
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--accent);
-            color: white;
-            font-size: 10px;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .lang-toggle {
-            display: flex;
-            gap: 4px;
-            background: var(--bg);
-            border-radius: 20px;
-            padding: 3px;
-            border: 1px solid var(--border);
-        }
-
-        .lang-btn {
-            background: none;
-            border: none;
-            padding: 4px 10px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: all 0.2s;
-        }
-        .lang-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* ----- SIDEBAR ----- */
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .sidebar-overlay.open {
-            display: block;
-            opacity: 1;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: var(--sidebar-width);
-            max-width: 85%;
-            height: 100%;
-            background: var(--bg-card);
-            z-index: 2001;
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 24px 16px;
-            overflow-y: auto;
-            border-right: 1px solid var(--border);
-        }
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            font-weight: 700;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-        .sidebar-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .sidebar-user h4 {
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .sidebar-user p {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-        .sidebar-menu li {
-            margin-bottom: 4px;
-        }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 14px;
-            border-radius: 12px;
-            color: var(--text);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background: var(--bg);
-        }
-        .sidebar-menu a i {
-            width: 22px;
-            text-align: center;
-            font-size: 18px;
-            color: var(--text-secondary);
-        }
-        .sidebar-menu a.active i {
-            color: var(--accent);
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 16px 0;
-        }
-
-        .sidebar-logout {
-            margin-top: 20px;
-            color: var(--accent) !important;
-        }
-        .sidebar-logout i {
-            color: var(--accent) !important;
-        }
-
-        /* ----- BOTTOM NAV ----- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: var(--bottom-nav-height);
-            background: var(--bg-card);
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            z-index: 1000;
-            padding-bottom: env(safe-area-inset-bottom);
-            transition: background 0.3s;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 10px;
-            cursor: pointer;
-            padding: 4px 12px;
-            transition: color 0.2s;
-            position: relative;
-            text-decoration: none;
-        }
-        .nav-item i {
-            font-size: 22px;
-            transition: transform 0.2s;
-        }
-        .nav-item.active {
-            color: var(--accent);
-        }
-        .nav-item.active i {
-            transform: scale(1.1);
-        }
-        .nav-item .badge {
-            position: absolute;
-            top: 0;
-            right: 4px;
-            background: var(--accent);
-            color: white;
-            font-size: 9px;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        /* ----- PAGES CONTAINER ----- */
-        .page {
-            display: none;
-            padding: 16px;
-            animation: fadeIn 0.3s ease;
-        }
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ----- FLOATING CART ----- */
-        .cart-float {
-            position: fixed;
-            bottom: calc(var(--bottom-nav-height) + 20px);
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.4);
-            z-index: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-        .cart-float:active {
-            transform: scale(0.9);
-        }
-        .cart-float .count {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--gold);
-            color: white;
-            font-size: 12px;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        /* ----- CARDS / GRID ----- */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .product-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        .product-card:active {
-            transform: scale(0.97);
-        }
-        .product-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: var(--bg);
-        }
-        .product-card .info {
-            padding: 12px;
-        }
-        .product-card .info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .product-card .info .price {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-        .product-card .info .old-price {
-            font-size: 13px;
-            color: var(--text-secondary);
-            text-decoration: line-through;
-            margin-left: 8px;
-        }
-
-        /* ----- MODAL ----- */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 3000;
-            display: none;
-            align-items: flex-end;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-        .modal-overlay.open {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            border-radius: var(--radius) var(--radius) 0 0;
-            padding: 24px 20px;
-            overflow-y: auto;
-            animation: slideUp 0.3s ease;
-            padding-bottom: 40px;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-        .modal-header h3 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--text);
-            cursor: pointer;
-        }
-
-        /* ----- FORM ELEMENTS ----- */
-        input, select, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 2px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            font-size: 15px;
-            transition: border 0.2s;
-            font-family: inherit;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border-radius: 12px;
-            border: none;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-        .btn-primary:hover {
-            opacity: 0.9;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--border);
-            color: var(--text);
-        }
-        .btn-gold {
-            background: var(--gold);
-            color: white;
-        }
-        .btn-google {
-            background: #4285F4;
-            color: white;
-        }
-
-        /* ----- UTILITIES ----- */
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .gap-8 { gap: 8px; }
-        .gap-12 { gap: 12px; }
-        .gap-16 { gap: 16px; }
-        .mt-8 { margin-top: 8px; }
-        .mt-16 { margin-top: 16px; }
-        .mt-24 { margin-top: 24px; }
-        .mb-8 { margin-bottom: 8px; }
-        .mb-16 { margin-bottom: 16px; }
-        .text-center { text-align: center; }
-        .text-secondary { color: var(--text-secondary); }
-        .text-accent { color: var(--accent); }
-        .text-gold { color: var(--gold); }
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .row > * { flex: 1; min-width: 140px; }
-
-        /* ----- CATEGORY TABS ----- */
-        .category-tabs {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 4px 0 12px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .category-tabs::-webkit-scrollbar { display: none; }
-        .category-tab {
-            padding: 8px 20px;
-            border-radius: 20px;
-            border: 2px solid var(--border);
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .category-tab.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        /* ----- NOTIFICATION TOAST ----- */
-        .toast-container {
-            position: fixed;
-            top: calc(var(--header-height) + 12px);
-            right: 12px;
-            left: 12px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            pointer-events: none;
-        }
-        .toast {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 14px 18px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            border-left: 4px solid var(--accent);
-            pointer-events: all;
-            animation: slideDown 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .toast.success { border-left-color: #22c55e; }
-        .toast.error { border-left-color: #ef4444; }
-        .toast i { font-size: 20px; }
-        .toast .msg { flex: 1; font-size: 14px; font-weight: 500; }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ----- RESPONSIVE ----- */
-        @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            .product-card img {
-                height: 150px;
-            }
-            .modal-content {
-                padding: 20px 16px;
-            }
-            .header {
-                padding: 0 12px;
-            }
-            .logo {
-                font-size: 18px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .bottom-nav {
-                display: none;
-            }
-            body {
-                padding-bottom: 20px;
-            }
-            .cart-float {
-                bottom: 20px;
-            }
-        }
+            --bg:#f5f5f5;
+            --card:#ffffff;
+            --text:#1a1a1a;
+            --border:#e0e0e0;
+            --primary:#1a1a1a;
+            --primary-hover:#333;
+            --input-bg:#fafafa;
+        }
+        .dark {
+            --bg:#121212;
+            --card:#1e1e1e;
+            --text:#f0f0f0;
+            --border:#333;
+            --primary:#f0f0f0;
+            --primary-hover:#ccc;
+            --input-bg:#2a2a2a;
+        }
+        body { background:var(--bg); display:flex; justify-content:center; align-items:center; min-height:100vh; padding:20px; }
+        .auth-container { background:var(--card); border-radius:16px; padding:40px 32px; width:100%; max-width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+        .logo { text-align:center; font-size:28px; font-weight:800; letter-spacing:2px; color:var(--text); margin-bottom:32px; }
+        .logo span { background:#000; color:#fff; padding:4px 12px; border-radius:4px; }
+        h1 { font-size:24px; color:var(--text); margin-bottom:8px; }
+        .subtitle { color:#888; font-size:14px; margin-bottom:24px; }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; }
+        .form-group input { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; transition:0.2s; }
+        .form-group input:focus { border-color:var(--primary); }
+        .password-wrapper { position:relative; }
+        .password-wrapper input { padding-right:44px; }
+        .password-wrapper .toggle-pass { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:#888; cursor:pointer; font-size:16px; }
+        .options { display:flex; justify-content:space-between; align-items:center; margin:16px 0 24px; }
+        .options label { font-size:13px; color:var(--text); display:flex; align-items:center; gap:8px; cursor:pointer; }
+        .options a { color:var(--primary); text-decoration:none; font-size:13px; font-weight:600; }
+        .btn-primary { width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; transition:0.2s; }
+        .btn-primary:hover { opacity:0.85; }
+        .btn-google { width:100%; padding:12px; background:var(--card); color:var(--text); border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:12px; transition:0.2s; }
+        .btn-google:hover { background:var(--bg); }
+        .divider { display:flex; align-items:center; margin:20px 0; gap:12px; }
+        .divider hr { flex:1; border:none; border-top:1px solid var(--border); }
+        .divider span { color:#888; font-size:12px; text-transform:uppercase; letter-spacing:1px; }
+        .footer-text { text-align:center; font-size:14px; color:#888; margin-top:20px; }
+        .footer-text a { color:var(--primary); font-weight:600; text-decoration:none; }
+        .error-msg { color:#e74c3c; font-size:13px; margin-top:4px; display:none; }
+        .success-msg { color:#27ae60; font-size:13px; margin-top:4px; display:none; }
+        .dark .btn-google { background:#2a2a2a; }
+        .dark .btn-google:hover { background:#333; }
+        .dark .logo span { background:#fff; color:#000; }
     </style>
 </head>
 <body>
 
-    <!-- ===== TOAST CONTAINER ===== -->
-    <div class="toast-container" id="toastContainer"></div>
+<div class="auth-container" id="app">
+    <div class="logo">WA<span>KE</span></div>
 
-    <!-- ===== HEADER ===== -->
-    <header class="header">
-        <div class="header-left">
-            <button class="menu-btn" id="menuBtn" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="logo">WAKE<span>.</span></div>
-        </div>
-        <div class="header-right">
-            <div class="lang-toggle">
-                <button class="lang-btn active" data-lang="fr">FR</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-            </div>
-            <button class="header-btn" id="themeBtn" aria-label="Thème">
-                <i class="fas fa-moon" id="themeIcon"></i>
-            </button>
-            <button class="header-btn" id="notifBtn" aria-label="Notifications">
-                <i class="fas fa-bell"></i>
-                <span class="notif-badge" id="notifBadge">3</span>
-            </button>
-        </div>
-    </header>
+    <h1>Connexion</h1>
+    <p class="subtitle">Connectez-vous à votre compte WAKE</p>
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-profile">
-            <div class="sidebar-avatar" id="sidebarAvatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="sidebar-user">
-                <h4 id="sidebarName">Invité</h4>
-                <p id="sidebarEmail">Non connecté</p>
-            </div>
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="vous@exemple.com" required>
         </div>
 
-        <ul class="sidebar-menu">
-            <li><a class="active" data-page="home"><i class="fas fa-house"></i> <span data-i18n="home">Accueil</span></a></li>
-            <li><a data-page="shop"><i class="fas fa-store"></i> <span data-i18n="shop">Boutique</span></a></li>
-            <li><a data-page="events"><i class="fas fa-calendar-days"></i> <span data-i18n="events">Événements</span></a></li>
-            <li><a data-page="transactions"><i class="fas fa-receipt"></i> <span data-i18n="transactions">Transactions</span></a></li>
-            <li><a data-page="orders"><i class="fas fa-truck"></i> <span data-i18n="orders">Commandes</span></a></li>
-            <li><a data-page="support"><i class="fas fa-headset"></i> <span data-i18n="support">Support</span></a></li>
-            <li><a data-page="profile"><i class="fas fa-user"></i> <span data-i18n="profile">Profil</span></a></li>
-            <li class="sidebar-divider"></li>
-            <li><a data-page="settings"><i class="fas fa-gear"></i> <span data-i18n="settings">Paramètres</span></a></li>
-            <li><a data-page="about"><i class="fas fa-info-circle"></i> <span data-i18n="about">À propos</span></a></li>
-            <li class="sidebar-divider"></li>
-            <li><a class="sidebar-logout" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> <span data-i18n="logout">Déconnexion</span></a></li>
-        </ul>
-    </nav>
-
-    <!-- ===== PAGES ===== -->
-
-    <!-- HOME -->
-    <section class="page active" id="page-home">
-        <h1 data-i18n="welcome">Bienvenue sur WAKE</h1>
-        <p class="text-secondary" data-i18n="subtitle">La marque qui réveille ton style</p>
-        <div class="product-grid" id="homeProducts"></div>
-    </section>
-
-    <!-- SHOP -->
-    <section class="page" id="page-shop">
-        <div class="flex-between">
-            <h2 data-i18n="shop">Boutique</h2>
-            <input type="text" id="searchInput" placeholder="Rechercher..." style="max-width:180px;padding:8px 12px;font-size:14px;">
-        </div>
-        <div class="category-tabs" id="categoryTabs">
-            <button class="category-tab active" data-cat="all">ALL</button>
-        </div>
-        <div class="product-grid" id="shopProducts"></div>
-    </section>
-
-    <!-- EVENTS -->
-    <section class="page" id="page-events">
-        <h2 data-i18n="events">Événements</h2>
-        <div id="eventsList"></div>
-    </section>
-
-    <!-- TRANSACTIONS -->
-    <section class="page" id="page-transactions">
-        <h2 data-i18n="transactions">Mes transactions</h2>
-        <div id="transactionsList"></div>
-    </section>
-
-    <!-- ORDERS -->
-    <section class="page" id="page-orders">
-        <h2 data-i18n="orders">Mes commandes</h2>
-        <div id="ordersList"></div>
-    </section>
-
-    <!-- SUPPORT -->
-    <section class="page" id="page-support">
-        <h2 data-i18n="support">Support client</h2>
-        <div class="row mt-16">
-            <a href="#" class="btn btn-outline" style="flex:1"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a href="#" class="btn btn-outline" style="flex:1"><i class="fas fa-envelope"></i> Email</a>
-        </div>
-        <div class="mt-16" id="chatMessages" style="height:300px;background:var(--bg);border-radius:var(--radius);padding:16px;overflow-y:auto;"></div>
-        <div class="row mt-8">
-            <input type="text" id="chatInput" placeholder="Votre message..." style="flex:1;">
-            <button class="btn btn-primary" style="flex:0 0 auto;width:auto;padding:14px 20px;" id="chatSend"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </section>
-
-    <!-- PROFILE -->
-    <section class="page" id="page-profile">
-        <h2 data-i18n="profile">Profil</h2>
-        <div class="text-center mt-16">
-            <div style="width:100px;height:100px;border-radius:50%;background:var(--accent);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:40px;color:white;overflow:hidden;">
-                <i class="fas fa-user"></i>
-            </div>
-            <h3 id="profileName">Utilisateur</h3>
-            <p class="text-secondary" id="profileEmail">email@exemple.com</p>
-            <p class="text-gold font-bold">Code parrainage: <span id="referralCode">WAKE-XXXX</span></p>
-        </div>
-        <div class="mt-16">
-            <button class="btn btn-outline"><i class="fas fa-camera"></i> Changer photo</button>
-            <button class="btn btn-outline mt-8"><i class="fas fa-key"></i> Modifier mot de passe</button>
-        </div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section class="page" id="page-settings">
-        <h2 data-i18n="settings">Paramètres</h2>
-        <div class="mt-16">
-            <div class="flex-between" style="padding:12px 0;border-bottom:1px solid var(--border);">
-                <span data-i18n="language">Langue</span>
-                <div class="lang-toggle">
-                    <button class="lang-btn active" data-lang="fr">FR</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
-                </div>
-            </div>
-            <div class="flex-between" style="padding:12px 0;border-bottom:1px solid var(--border);">
-                <span data-i18n="theme">Thème</span>
-                <button class="btn btn-outline" style="width:auto;padding:8px 16px;" id="settingsThemeBtn">
-                    <i class="fas fa-moon"></i> <span id="settingsThemeLabel">Sombre</span>
+        <div class="form-group">
+            <label>Mot de passe</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="••••••••" required>
+                <button type="button" class="toggle-pass" onclick="togglePassword()">
+                    <i class="fa-regular fa-eye"></i>
                 </button>
             </div>
-            <div class="flex-between" style="padding:12px 0;">
-                <span data-i18n="sessions">Sessions actives</span>
-                <button class="btn btn-outline" style="width:auto;padding:8px 16px;"><i class="fas fa-sign-out-alt"></i> Tout déconnecter</button>
-            </div>
         </div>
-    </section>
 
-    <!-- ABOUT -->
-    <section class="page" id="page-about">
-        <h2 data-i18n="about">À propos</h2>
-        <p class="mt-16 text-secondary">WAKE est une marque de vêtements qui réveille votre style. Qualité, confort et design unique.</p>
-    </section>
-
-    <!-- ===== FLOATING CART ===== -->
-    <button class="cart-float" id="cartFloat">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="count" id="cartCount">0</span>
-    </button>
-
-    <!-- ===== CART MODAL ===== -->
-    <div class="modal-overlay" id="cartModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-shopping-cart"></i> Mon panier</h3>
-                <button class="modal-close" id="cartClose"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="cartItems"></div>
-            <div class="flex-between mt-16" style="font-size:18px;font-weight:700;padding-top:12px;border-top:2px solid var(--border);">
-                <span data-i18n="total">Total</span>
-                <span id="cartTotal">0 FCFA</span>
-            </div>
-            <button class="btn btn-primary mt-16" id="cartCheckout" data-i18n="checkout">Payer maintenant</button>
+        <div class="options">
+            <label>
+                <input type="checkbox" id="remember"> Se souvenir de moi
+            </label>
+            <a href="forgot-password.html">Mot de passe oublié ?</a>
         </div>
-    </div>
 
-    <!-- ===== PAYMENT MODAL ===== -->
-    <div class="modal-overlay" id="paymentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-credit-card"></i> Paiement</h3>
-                <button class="modal-close" id="paymentClose"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="paymentForm">
-                <label data-i18n="city">Ville</label>
-                <input type="text" id="payCity" placeholder="Douala">
-                <label class="mt-8" data-i18n="district">Quartier</label>
-                <input type="text" id="payDistrict" placeholder="Bonamoussadi">
-                <label class="mt-8" data-i18n="phone">Téléphone</label>
-                <input type="tel" id="payPhone" placeholder="6XXXXXXXX">
-                <label class="mt-8" data-i18n="promo">Code promo</label>
-                <input type="text" id="payPromo" placeholder="WAKE-20">
-                <div class="mt-16">
-                    <button class="btn btn-primary" id="payNow"><i class="fas fa-check"></i> Confirmer</button>
-                </div>
-            </div>
+        <div id="errorMsg" class="error-msg"></div>
+
+        <button type="submit" class="btn-primary">Se connecter</button>
+
+        <div class="divider">
+            <hr><span>ou</span><hr>
         </div>
-    </div>
 
-    <!-- ===== JAVASCRIPT COMPLET ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // =====================================================
-        // CONFIGURATION (à remplacer par tes clés)
-        // =====================================================
-        const CONFIG = {
-            supabaseUrl: 'https://votre-projet.supabase.co',
-            supabaseKey: 'votre-clé-anon-publique',
-            fapshiApiKey: 'votre-clé-fapshi'
-        };
+        <button type="button" class="btn-google" onclick="loginWithGoogle()">
+            <i class="fa-brands fa-google"></i> Continuer avec Google
+        </button>
+    </form>
 
-        // =====================================================
-        // SUPABASE CLIENT
-        // =====================================================
-        const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+    <p class="footer-text">
+        Pas encore de compte ? <a href="register.html">S'inscrire</a>
+    </p>
+</div>
 
-        // =====================================================
-        // ÉTAT GLOBAL
-        // =====================================================
-        const state = {
-            user: null,
-            cart: [],
-            theme: localStorage.getItem('wake-theme') || 'light',
-            lang: localStorage.getItem('wake-lang') || 'fr',
-            currentPage: 'home',
-            products: [],
-            events: [],
-            transactions: [],
-            orders: []
-        };
+<script src="../js/supabase.js"></script>
+<script>
+    // ===== THÈME + LANGUE PERSISTANTS =====
+    function applyTheme(theme) {
+        document.documentElement.className = theme;
+        localStorage.setItem('wake-theme', theme);
+        const icon = document.querySelector('.theme-toggle i');
+        if(icon) icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
 
-        // =====================================================
-        // TRADUCTIONS
-        // =====================================================
-        const i18n = {
-            fr: {
-                home: 'Accueil',
-                shop: 'Boutique',
-                events: 'Événements',
-                transactions: 'Transactions',
-                orders: 'Commandes',
-                support: 'Support',
-                profile: 'Profil',
-                settings: 'Paramètres',
-                about: 'À propos',
-                logout: 'Déconnexion',
-                welcome: 'Bienvenue sur WAKE',
-                subtitle: 'La marque qui réveille ton style',
-                total: 'Total',
-                checkout: 'Payer maintenant',
-                city: 'Ville',
-                district: 'Quartier',
-                phone: 'Téléphone',
-                promo: 'Code promo'
-            },
-            en: {
-                home: 'Home',
-                shop: 'Shop',
-                events: 'Events',
-                transactions: 'Transactions',
-                orders: 'Orders',
-                support: 'Support',
-                profile: 'Profile',
-                settings: 'Settings',
-                about: 'About',
-                logout: 'Logout',
-                welcome: 'Welcome to WAKE',
-                subtitle: 'The brand that awakens your style',
-                total: 'Total',
-                checkout: 'Checkout',
-                city: 'City',
-                district: 'District',
-                phone: 'Phone',
-                promo: 'Promo code'
-            }
-        };
+    function getTheme() {
+        return localStorage.getItem('wake-theme') || 'light';
+    }
 
-        // =====================================================
-        // THÈME
-        // =====================================================
-        function setTheme(theme) {
-            state.theme = theme;
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('wake-theme', theme);
-            const icon = document.getElementById('themeIcon');
-            const label = document.getElementById('settingsThemeLabel');
-            if (theme === 'dark') {
-                icon.className = 'fas fa-sun';
-                if (label) label.textContent = 'Clair';
-            } else {
-                icon.className = 'fas fa-moon';
-                if (label) label.textContent = 'Sombre';
-            }
+    function toggleTheme() {
+        const current = getTheme();
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Appliquer thème au chargement
+    applyTheme(getTheme());
+
+    // ===== TOGGLE PASSWORD =====
+    function togglePassword() {
+        const input = document.getElementById('password');
+        const icon = document.querySelector('.toggle-pass i');
+        if(input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fa-regular fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fa-regular fa-eye';
         }
+    }
 
-        function toggleTheme() {
-            setTheme(state.theme === 'light' ? 'dark' : 'light');
-        }
+    // ===== LOGIN =====
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('errorMsg');
 
-        // =====================================================
-        // LANGUE
-        // =====================================================
-        function setLang(lang) {
-            state.lang = lang;
-            localStorage.setItem('wake-lang', lang);
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
+        errorMsg.style.display = 'none';
+
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email, password
             });
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.dataset.i18n;
-                if (i18n[lang] && i18n[lang][key]) {
-                    el.textContent = i18n[lang][key];
-                }
-            });
-            // Recharger les produits pour les traductions dynamiques
-            renderProducts();
-        }
 
-        // =====================================================
-        // TOAST NOTIFICATIONS
-        // =====================================================
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-exclamation-circle',
-                info: 'fa-info-circle'
-            };
-            toast.innerHTML = `
-                <i class="fas ${icons[type] || icons.info}"></i>
-                <span class="msg">${message}</span>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100px)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
+            if(error) throw error;
 
-        // =====================================================
-        // NAVIGATION
-        // =====================================================
-        function navigateTo(page) {
-            state.currentPage = page;
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`page-${page}`).classList.add('active');
-            document.querySelectorAll('.sidebar-menu a, .nav-item').forEach(el => {
-                el.classList.toggle('active', el.dataset.page === page);
-            });
-            closeSidebar();
+            window.location.href = '../index.html';
+        } catch(err) {
+            errorMsg.textContent = err.message || 'Erreur de connexion';
+            errorMsg.style.display = 'block';
         }
+    });
 
-        // =====================================================
-        // SIDEBAR
-        // =====================================================
-        function openSidebar() {
-            document.getElementById('sidebar').classList.add('open');
-            document.getElementById('sidebarOverlay').classList.add('open');
-        }
-
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('open');
-            document.getElementById('sidebarOverlay').classList.remove('open');
-        }
-
-        // =====================================================
-        // AUTH
-        // =====================================================
-        async function checkAuth() {
-            const { data } = await supabase.auth.getSession();
-            if (data.session) {
-                state.user = data.session.user;
-                updateUserUI();
-            }
-        }
-
-        function updateUserUI() {
-            if (state.user) {
-                document.getElementById('sidebarName').textContent = state.user.user_metadata?.full_name || state.user.email;
-                document.getElementById('sidebarEmail').textContent = state.user.email;
-                document.getElementById('profileName').textContent = state.user.user_metadata?.full_name || 'Utilisateur';
-                document.getElementById('profileEmail').textContent = state.user.email;
-            }
-        }
-
-        async function logoutUser() {
-            await supabase.auth.signOut();
-            state.user = null;
-            updateUserUI();
-            showToast('Déconnecté', 'success');
-            navigateTo('home');
-        }
-
-        // =====================================================
-        // GOOGLE LOGIN
-        // =====================================================
-        async function loginWithGoogle() {
-            const { error } = await supabase.auth.signInWithOAuth({
+    // ===== LOGIN GOOGLE =====
+    async function loginWithGoogle() {
+        try {
+            const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: { redirectTo: window.location.origin }
+                options: { redirectTo: window.location.origin + '/index.html' }
             });
-            if (error) showToast(error.message, 'error');
+            if(error) throw error;
+        } catch(err) {
+            alert(err.message);
         }
+    }
+</script>
 
-        // =====================================================
-        // PRODUITS
-        // =====================================================
-        async function loadProducts() {
-            const { data, error } = await supabase
-                .from('products')
-                .select('*')
-                .order('created_at', { ascending: false });
-            if (error) {
-                // Données mock pour test
-                state.products = [
-                    { id: 1, name: 'T-shirt WAKE', description: '100% coton', price: 15000, image: 'https://picsum.photos/seed/1/400/400', category: 'tshirt', sizes: ['S','M','L','XL'], colors: ['Noir','Blanc'] },
-                    { id: 2, name: 'Hoodie WAKE', description: 'Coupe oversize', price: 25000, image: 'https://picsum.photos/seed/2/400/400', category: 'hoodie', sizes: ['M','L','XL'], colors: ['Noir','Gris'] },
-                    { id: 3, name: 'Casquette WAKE', description: 'Adjustable', price: 8000, image: 'https://picsum.photos/seed/3/400/400', category: 'accessories', sizes: ['Unique'], colors: ['Noir'] }
-                ];
-                renderProducts();
-                return;
-            }
-            state.products = data || [];
-            renderProducts();
-        }
-
-        function renderProducts() {
-            const container = document.getElementById('shopProducts');
-            const homeContainer = document.getElementById('homeProducts');
-            const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
-            const category = document.querySelector('.category-tab.active')?.dataset.cat || 'all';
-
-            let filtered = state.products.filter(p => {
-                const matchSearch = p.name.toLowerCase().includes(search) || p.description?.toLowerCase().includes(search);
-                const matchCat = category === 'all' || p.category === category;
-                return matchSearch && matchCat;
-            });
-
-            const render = (products) => {
-                if (!products.length) {
-                    return '<p class="text-secondary text-center mt-16">Aucun produit trouvé</p>';
-                }
-                return products.map(p => `
-                    <div class="product-card" onclick="showProductDetails('${p.id}')">
-                        <img src="${p.image || 'https://picsum.photos/seed/${p.id}/400/400'}" alt="${p.name}" loading="lazy">
-                        <div class="info">
-                            <h4>${p.name}</h4>
-                            <div class="price">${p.price.toLocaleString()} FCFA</div>
-                        </div>
-                    </div>
-                `).join('');
-            };
-
-            if (container) container.innerHTML = render(filtered);
-            if (homeContainer) homeContainer.innerHTML = render(state.products.slice(0, 6));
-        }
-
-        // =====================================================
-        // PANIER
-        // =====================================================
-        function addToCart(productId, size, color, quantity = 1) {
-            const product = state.products.find(p => p.id == productId);
-            if (!product) return;
-            const existing = state.cart.find(item => item.id == productId && item.size === size && item.color === color);
-            if (existing) {
-                existing.quantity += quantity;
-            } else {
-                state.cart.push({ ...product, size, color, quantity });
-            }
-            updateCartUI();
-            showToast(`${product.name} ajouté au panier`, 'success');
-        }
-
-        function removeFromCart(index) {
-            state.cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const count = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cartCount').textContent = count;
-            const total = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            document.getElementById('cartTotal').textContent = total.toLocaleString() + ' FCFA';
-            const container = document.getElementById('cartItems');
-            if (container) {
-                if (!state.cart.length) {
-                    container.innerHTML = '<p class="text-secondary text-center">Panier vide</p>';
-                    return;
-                }
-                container.innerHTML = state.cart.map((item, i) => `
-                    <div class="flex-between" style="padding:8px 0;border-bottom:1px solid var(--border);">
-                        <div>
-                            <strong>${item.name}</strong>
-                            <span class="text-secondary" style="font-size:13px;"> ${item.size} - ${item.color}</span>
-                            <div>${item.quantity} × ${item.price.toLocaleString()} FCFA</div>
-                        </div>
-                        <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--accent);font-size:18px;cursor:pointer;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // =====================================================
-        // ÉVÉNEMENTS
-        // =====================================================
-        async function loadEvents() {
-            const { data, error } = await supabase
-                .from('events')
-                .select('*')
-                .order('date', { ascending: true });
-            if (error) {
-                state.events = [
-                    { id: 1, name: 'WAKE FASHION SHOW', description: 'Défilé de mode', price: 5000, image: 'https://picsum.photos/seed/event1/600/400', date: '2026-07-15' }
-                ];
-                renderEvents();
-                return;
-            }
-            state.events = data || [];
-            renderEvents();
-        }
-
-        function renderEvents() {
-            const container = document.getElementById('eventsList');
-            if (!container) return;
-            if (!state.events.length) {
-                container.innerHTML = '<p class="text-secondary text-center mt-16">Aucun événement à venir</p>';
-                return;
-            }
-            container.innerHTML = state.events.map(e => `
-                <div style="background:var(--bg-card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-top:16px;">
-                    <img src="${e.image || 'https://picsum.photos/seed/${e.id}/600/400'}" alt="${e.name}" style="width:100%;height:200px;object-fit:cover;">
-                    <div style="padding:16px;">
-                        <h3>${e.name}</h3>
-                        <p class="text-secondary">${e.description}</p>
-                        <div class="flex-between mt-8">
-                            <span class="text-accent font-bold">${e.price.toLocaleString()} FCFA</span>
-                            <button class="btn btn-primary" style="width:auto;padding:8px 20px;" onclick="buyEventPass('${e.id}')">
-                                <i class="fas fa-ticket"></i> Pass
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // =====================================================
-        // NOTIFICATIONS
-        // =====================================================
-        function toggleNotifications() {
-            const badge = document.getElementById('notifBadge');
-            const count = parseInt(badge.textContent) || 0;
-            if (count > 0) {
-                showToast('Notifications lues', 'success');
-                badge.textContent = '0';
-                badge.style.display = 'none';
-            } else {
-                badge.style.display = 'flex';
-                badge.textContent = '3';
-            }
-        }
-
-        // =====================================================
-        // INITIALISATION
-        // =====================================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Thème
-            setTheme(state.theme);
-
-            // Langue
-            setLang(state.lang);
-
-            // Auth
-            await checkAuth();
-
-            // Charger données
-            await loadProducts();
-            await loadEvents();
-
-            // Événements UI
-            document.getElementById('menuBtn').addEventListener('click', openSidebar);
-            document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
-
-            document.querySelectorAll('.sidebar-menu a[data-page], .nav-item[data-page]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navigateTo(el.dataset.page);
-                });
-            });
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', () => setLang(btn.dataset.lang));
-            });
-
-            document.getElementById('themeBtn').addEventListener('click', toggleTheme);
-            document.getElementById('settingsThemeBtn')?.addEventListener('click', toggleTheme);
-
-            document.getElementById('notifBtn').addEventListener('click', toggleNotifications);
-
-            document.getElementById('logoutBtn').addEventListener('click', logoutUser);
-
-            // Panier
-            document.getElementById('cartFloat').addEventListener('click', () => {
-                document.getElementById('cartModal').classList.add('open');
-                updateCartUI();
-            });
-            document.getElementById('cartClose').addEventListener('click', () => {
-                document.getElementById('cartModal').classList.remove('open');
-            });
-
-            // Recherche
-            document.getElementById('searchInput')?.addEventListener('input', renderProducts);
-
-            // Catégories
-            document.querySelectorAll('.category-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    renderProducts();
-                });
-            });
-
-            // Paiement
-            document.getElementById('cartCheckout')?.addEventListener('click', () => {
-                document.getElementById('cartModal').classList.remove('open');
-                document.getElementById('paymentModal').classList.add('open');
-            });
-            document.getElementById('paymentClose').addEventListener('click', () => {
-                document.getElementById('paymentModal').classList.remove('open');
-            });
-
-            document.getElementById('payNow')?.addEventListener('click', async () => {
-                const city = document.getElementById('payCity').value;
-                const district = document.getElementById('payDistrict').value;
-                const phone = document.getElementById('payPhone').value;
-                const promo = document.getElementById('payPromo').value;
-
-                if (!city || !district || !phone) {
-                    showToast('Veuillez remplir tous les champs', 'error');
-                    return;
-                }
-
-                showToast('Paiement en cours...', 'info');
-                // Ici intégration Fapshi
-                // await processPayment(state.cart, { city, district, phone, promo });
-                showToast('Paiement réussi ! Commande confirmée.', 'success');
-                document.getElementById('paymentModal').classList.remove('open');
-                state.cart = [];
-                updateCartUI();
-            });
-
-            // Chat
-            document.getElementById('chatSend')?.addEventListener('click', () => {
-                const input = document.getElementById('chatInput');
-                if (input.value.trim()) {
-                    const container = document.getElementById('chatMessages');
-                    container.innerHTML += `<div style="text-align:right;margin:8px 0;"><span style="background:var(--accent);color:white;padding:8px 16px;border-radius:16px;">${input.value}</span></div>`;
-                    input.value = '';
-                    container.scrollTop = container.scrollHeight;
-                    // Simuler réponse
-                    setTimeout(() => {
-                        container.innerHTML += `<div style="text-align:left;margin:8px 0;"><span style="background:var(--bg);padding:8px 16px;border-radius:16px;">Merci pour votre message, nous vous répondons dans quelques instants.</span></div>`;
-                        container.scrollTop = container.scrollHeight;
-                    }, 1000);
-                }
-            });
-
-            // Navigation basse (mobile)
-            const bottomNav = document.createElement('div');
-            bottomNav.className = 'bottom-nav';
-            bottomNav.innerHTML = `
-                <button class="nav-item active" data-page="home"><i class="fas fa-house"></i><span data-i18n="home">Accueil</span></button>
-                <button class="nav-item" data-page="shop"><i class="fas fa-store"></i><span data-i18n="shop">Boutique</span></button>
-                <button class="nav-item" data-page="events"><i class="fas fa-calendar-days"></i><span data-i18n="events">Events</span></button>
-                <button class="nav-item" data-page="transactions"><i class="fas fa-receipt"></i><span data-i18n="transactions">Trans</span></button>
-                <button class="nav-item" data-page="profile"><i class="fas fa-user"></i><span data-i18n="profile">Profil</span></button>
-            `;
-            document.body.appendChild(bottomNav);
-            bottomNav.querySelectorAll('.nav-item').forEach(el => {
-                el.addEventListener('click', () => {
-                    bottomNav.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                    el.classList.add('active');
-                    navigateTo(el.dataset.page);
-                });
-            });
-
-            console.log('🚀 WAKE est prêt !');
-        });
-
-        // =====================================================
-        // FONCTIONS GLOBALES (accessibles depuis HTML)
-        // =====================================================
-        window.showProductDetails = function(productId) {
-            const product = state.products.find(p => p.id == productId);
-            if (!product) return;
-            // Simuler un modal de détail
-            showToast(`${product.name} - ${product.price.toLocaleString()} FCFA`, 'info');
-            // Ici tu ouvres un vrai modal avec les détails
-            // Pour l'instant on ajoute au panier avec des valeurs par défaut
-            addToCart(productId, product.sizes?.[0] || 'M', product.colors?.[0] || 'Noir');
-        };
-
-        window.buyEventPass = function(eventId) {
-            const event = state.events.find(e => e.id == eventId);
-            if (!event) return;
-            if (!state.user) {
-                showToast('Veuillez vous connecter pour acheter un pass', 'error');
-                return;
-            }
-            showToast(`Pass pour "${event.name}" ajouté au panier`, 'success');
-            // Ajouter le pass comme un produit
-            state.cart.push({
-                id: `event-${eventId}`,
-                name: `Pass: ${event.name}`,
-                price: event.price,
-                quantity: 1,
-                image: event.image,
-                size: 'Unique',
-                color: 'N/A'
-            });
-            updateCartUI();
-        };
-
-        window.removeFromCart = removeFromCart;
-        window.addToCart = addToCart;
-    </script>
 </body>
 </html>
